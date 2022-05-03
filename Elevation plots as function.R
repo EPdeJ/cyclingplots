@@ -114,8 +114,7 @@ plot <- ggplot(data=gpx)+
   geom_area(data=gpx %>% mutate(ele=case_when(gradientNbined!="downhill or flat" ~ 0,
                                               TRUE ~ ele)),
             aes(x=distance_totalN/1000, 
-                y=ele,
-                position="stacked"),
+                y=ele),
             fill=coleasy,
             alpha=transparency
             )+
@@ -124,8 +123,7 @@ plot <- ggplot(data=gpx)+
   geom_area(data=gpx %>% mutate(ele=case_when(gradientNbined!="mild slope" ~ 0,
                                               TRUE ~ ele)),
             aes(x=distance_totalN/1000, 
-                y=ele,
-                position="stacked"),
+                y=ele),
             fill=colorscalestr[2],
             alpha=transparency
   )+
@@ -134,8 +132,7 @@ plot <- ggplot(data=gpx)+
   geom_area(data=gpx %>% mutate(ele=case_when(gradientNbined!="moderate slope" ~ 0,
                                               TRUE ~ ele)),
             aes(x=distance_totalN/1000, 
-                y=ele,
-                position="stacked"),
+                y=ele),
             fill=colorscalestr[3],
             alpha=transparency
   )+
@@ -144,8 +141,7 @@ plot <- ggplot(data=gpx)+
   geom_area(data=gpx %>% mutate(ele=case_when(gradientNbined!="steep" ~ 0,
                                               TRUE ~ ele)),
             aes(x=distance_totalN/1000, 
-                y=ele,
-                position="stacked"),
+                y=ele),
             fill=colorscalestr[4],
             alpha=transparency
   )+
@@ -154,8 +150,7 @@ plot <- ggplot(data=gpx)+
   geom_area(data=gpx %>% mutate(ele=case_when(gradientNbined!="very steep" ~ 0,
                                               TRUE ~ ele)),
             aes(x=distance_totalN/1000, 
-                y=ele,
-                position="stacked"),
+                y=ele),
             fill=colorscalestr[5],
             alpha=transparency
   )+
@@ -164,8 +159,7 @@ plot <- ggplot(data=gpx)+
   geom_area(data=gpx %>% mutate(ele=case_when(gradientNbined!="good luck" ~ 0,
                                               TRUE ~ ele)),
             aes(x=distance_totalN/1000, 
-                y=ele,
-                position="stacked"),
+                y=ele),
             fill=colorscalestr[6],
             alpha=transparency
   )+
@@ -213,4 +207,5 @@ if(plotsave){suppressMessages(ggsave(plot= plot,
 
 
 # use function ------------------------------------------------------------
-elevationprofile("gpx/yilan-wulling.gpx",plotname = "Yilan-Wulling", gpxrolling = 10, plotsave = T)
+filepath <- "gpx/run from strava.gpx"
+elevationprofile("gpx/run from strava.gpx",plotname = "strava run", gpxrolling = 100, plotsave = T)
