@@ -10,9 +10,11 @@ pacman::p_load(tidyverse,sf,units,zoo,RColorBrewer,Cairo)
 # function elevation profile -------------------------------------------------------
 elevationprofile <- function(filepath,
                              gpxrolling=10,
+                             coleasy="#9198A7",
                              colorscalestr=c("#5E4FA2", "#66C2A5", "#E6F598", "#FEE08B", "#F46D43", "#9E0142"),
                              linecolor="#23b09d",
                              maxlinecol="red",
+                             transparency=1,
                              elevationbreaksstr=c(-Inf, 0, 2.5, 5, 7.5, 10, Inf), 
                              plotsave=T,
                              plotname="empty",
@@ -70,9 +72,9 @@ gpx<- gpx %>% mutate(
 )                                                           #turn rolling gradient into factors/steps/bins
 
 
-head(gpx)
+print(slice_sample(gpx, n=10))                              #get a sample of the gpx data to check
 
-# plot --------------------------------------------------------------------
+
 plot <- ggplot(data=gpx)+
   #"downhill or flat"
   geom_area(data=gpx %>% mutate(ele=case_when(gradientNbined!="downhill or flat" ~ 0,
@@ -80,7 +82,8 @@ plot <- ggplot(data=gpx)+
             aes(x=distance_totalN/1000, 
                 y=ele,
                 position="stacked"),
-            fill=colorscalestr[1]
+            fill=coleasy,
+            alpha=transparency
             )+
   
   #"mild slope"
@@ -89,7 +92,8 @@ plot <- ggplot(data=gpx)+
             aes(x=distance_totalN/1000, 
                 y=ele,
                 position="stacked"),
-            fill=colorscalestr[2]
+            fill=colorscalestr[2],
+            alpha=transparency
   )+
   
   #"moderate slope"
@@ -98,7 +102,8 @@ plot <- ggplot(data=gpx)+
             aes(x=distance_totalN/1000, 
                 y=ele,
                 position="stacked"),
-            fill=colorscalestr[3]
+            fill=colorscalestr[3],
+            alpha=transparency
   )+
   
   #"steep"
@@ -107,7 +112,8 @@ plot <- ggplot(data=gpx)+
             aes(x=distance_totalN/1000, 
                 y=ele,
                 position="stacked"),
-            fill=colorscalestr[4]
+            fill=colorscalestr[4],
+            alpha=transparency
   )+
   
   # "very steep"
@@ -116,7 +122,8 @@ plot <- ggplot(data=gpx)+
             aes(x=distance_totalN/1000, 
                 y=ele,
                 position="stacked"),
-            fill=colorscalestr[5]
+            fill=colorscalestr[5],
+            alpha=transparency
   )+
   
   #"good luck"
@@ -125,7 +132,8 @@ plot <- ggplot(data=gpx)+
             aes(x=distance_totalN/1000, 
                 y=ele,
                 position="stacked"),
-            fill=colorscalestr[6]
+            fill=colorscalestr[6],
+            alpha=transparency
   )+
   geom_line(aes(x=distance_totalN/1000,y=ele), colour= linecolor, size=1)+
   geom_hline(aes(yintercept=max(ele)),linetype = 'dashed', col = maxlinecol)+
@@ -142,16 +150,16 @@ plot <- ggplot(data=gpx)+
         axis.title.x = element_text(vjust = -2, margin = margin(-0.5,0,0.5,0, unit = 'cm'))
          
   )
-print(plot)
+suppressWarnings(print(plot))
 
-if(plotsave){ggsave(plot= plot,
+if(plotsave){suppressMessages(ggsave(plot= plot,
                     paste0(plotname,".png"),
                     width = plotsavedimentiondpisstr[1],
                     height = plotsavedimentiondpisstr[2],
                     units =plotsavedimentiondpisstr[3],
                     dpi = plotsavedimentiondpisstr[4],
                     type = "cairo-png",
-                    bg = "transparent" )}
+                    bg = "transparent" ))}
 
 
 }
