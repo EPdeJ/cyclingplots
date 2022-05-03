@@ -201,7 +201,7 @@ if(plotsave){suppressMessages(ggsave(plot= plot,
                     width = plotsavedimentiondpisstr[1],
                     height = plotsavedimentiondpisstr[2],
                     units =plotsavedimentiondpisstr[3],
-                    dpi = plotsavedimentiondpisstr[4],
+                    dpi = as.numeric(plotsavedimentiondpisstr[4]),
                     type = "cairo-png",
                     bg = "transparent" ))}
 
@@ -212,4 +212,4 @@ if(plotsave){suppressMessages(ggsave(plot= plot,
 
 
 # use function ------------------------------------------------------------
-elevationprofile("yilan-wulling.gpx", plotsave = T)
+elevationprofile("yilan-wulling.gpx",gpxrolling = 200, plotsave = T)
