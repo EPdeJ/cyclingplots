@@ -213,4 +213,4 @@ if(plotsave){suppressMessages(ggsave(plot= plot,
 
 
 # use function ------------------------------------------------------------
-elevationprofile("yilan-wulling.gpx",plotname = "Yilan-Wulling", gpxrolling = 10, plotsave = T)
+elevationprofile("gpx/yilan-wulling.gpx",plotname = "Yilan-Wulling", gpxrolling = 10, plotsave = T)
