@@ -2,7 +2,8 @@
 #' 
 #' This function will plot an elevation profile based on garmin gpx files
 #' 6 levels have been set as categories for the area under the curve colors
-#' sf package is used to import the gpx, rolling averages are calculated by the zoo package
+#' sf package is used to import the gpx, rolling averages are calculated by the zoo package.
+#' Cairo package is used to save a transparent png.
 #' 
 #' ---------------parameters to set---------------------------
 #' filepath need to be set, for example "C:/Users/user/Desktop/yilan-wulling.gpx"
@@ -36,7 +37,7 @@
 
 
 # load packages
-pacman::p_load(tidyverse,sf,units,zoo,RColorBrewer,Cairo)
+pacman::p_load(tidyverse,sf,zoo,Cairo)
 
 
 # function elevation profile -------------------------------------------------------
@@ -198,8 +199,8 @@ suppressWarnings(print(plot))
 
 if(plotsave){suppressMessages(ggsave(plot= plot,
                     paste0(plotname,".png"),
-                    width = plotsavedimentiondpisstr[1],
-                    height = plotsavedimentiondpisstr[2],
+                    width = as.numeric(plotsavedimentiondpisstr[1]),
+                    height = as.numeric(plotsavedimentiondpisstr[2]),
                     units =plotsavedimentiondpisstr[3],
                     dpi = as.numeric(plotsavedimentiondpisstr[4]),
                     type = "cairo-png",
