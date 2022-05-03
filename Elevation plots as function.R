@@ -1,7 +1,39 @@
-#' NOTES FOR LATER DEVELOPMENT
+#' NOTES FOR FUNCTION USE
 #' 
-#'make into a function in which the rolling average can be adjusted 
-#'as well as filepath and dimentions
+#' This function will plot an elevation profile based on garmin gpx files
+#' 6 levels have been set as categories for the area under the curve colors
+#' sf package is used to import the gpx, rolling averages are calculated by the zoo package
+#' 
+#' ---------------parameters to set---------------------------
+#' filepath need to be set, for example "C:/Users/user/Desktop/yilan-wulling.gpx"
+#' to locate the gpx file
+#' 
+#' gpxrolling will define the roling avarage based on the number of gps point and
+#' thereby the level/detail of the gradient #' brackets. Smaller numbers will 
+#' make it more detailed, the plotting will take longer. For example, if a gpx file
+#' contains 2500 points, and the rolling average will be set to 2500, then the 
+#' gradient will just be the gradeint for the full climb.
+#' 
+#' coleasy will set the color of the downhill part
+#' 
+#' colorscalestr will set the colors of the gradient levels. String lenght 6.
+#' 
+#' linecolor set the color of the height profile
+#' 
+#' maxlinecol sets the color of the maximum height line 
+#' 
+#' transparency set the transparency of the area under the curve
+#' 
+#' elevationbreaksstr sets the how the rolling gradient should be divided 
+#' in different levels of difficulty
+#' 
+#' plotsave and plotname can be set to save the plot automatically with 
+#' plotsave as logical. Plots will be saved in the working directory.
+#' 
+#' plotsavedimentiondpisstr sets dimentions and dpi for the plot to save. Needs
+#' a string of 4 with width, height, unit and dpi
+#' 
+
 
 # load packages
 pacman::p_load(tidyverse,sf,units,zoo,RColorBrewer,Cairo)
@@ -16,7 +48,7 @@ elevationprofile <- function(filepath,
                              maxlinecol="red",
                              transparency=1,
                              elevationbreaksstr=c(-Inf, 0, 2.5, 5, 7.5, 10, Inf), 
-                             plotsave=T,
+                             plotsave=F,
                              plotname="empty",
                              plotsavedimentiondpisstr=c(24,10,"cm",300)){
                       
@@ -76,7 +108,8 @@ print(slice_sample(gpx, n=10))                              #get a sample of the
 
 
 plot <- ggplot(data=gpx)+
-  #"downhill or flat"
+  
+  #plot "downhill or flat" area under the curve
   geom_area(data=gpx %>% mutate(ele=case_when(gradientNbined!="downhill or flat" ~ 0,
                                               TRUE ~ ele)),
             aes(x=distance_totalN/1000, 
@@ -86,7 +119,7 @@ plot <- ggplot(data=gpx)+
             alpha=transparency
             )+
   
-  #"mild slope"
+  #plot "mild slope" area under the curve
   geom_area(data=gpx %>% mutate(ele=case_when(gradientNbined!="mild slope" ~ 0,
                                               TRUE ~ ele)),
             aes(x=distance_totalN/1000, 
@@ -96,7 +129,7 @@ plot <- ggplot(data=gpx)+
             alpha=transparency
   )+
   
-  #"moderate slope"
+  #plot "moderate slope" area under the curve
   geom_area(data=gpx %>% mutate(ele=case_when(gradientNbined!="moderate slope" ~ 0,
                                               TRUE ~ ele)),
             aes(x=distance_totalN/1000, 
@@ -106,7 +139,7 @@ plot <- ggplot(data=gpx)+
             alpha=transparency
   )+
   
-  #"steep"
+  #plot "steep" area under the curve
   geom_area(data=gpx %>% mutate(ele=case_when(gradientNbined!="steep" ~ 0,
                                               TRUE ~ ele)),
             aes(x=distance_totalN/1000, 
@@ -116,7 +149,7 @@ plot <- ggplot(data=gpx)+
             alpha=transparency
   )+
   
-  # "very steep"
+  #plot "very steep" area under the curve
   geom_area(data=gpx %>% mutate(ele=case_when(gradientNbined!="very steep" ~ 0,
                                               TRUE ~ ele)),
             aes(x=distance_totalN/1000, 
@@ -126,7 +159,7 @@ plot <- ggplot(data=gpx)+
             alpha=transparency
   )+
   
-  #"good luck"
+  #plot "good luck" area under the curve
   geom_area(data=gpx %>% mutate(ele=case_when(gradientNbined!="good luck" ~ 0,
                                               TRUE ~ ele)),
             aes(x=distance_totalN/1000, 
@@ -135,11 +168,21 @@ plot <- ggplot(data=gpx)+
             fill=colorscalestr[6],
             alpha=transparency
   )+
+  
+  #add height profile line
   geom_line(aes(x=distance_totalN/1000,y=ele), colour= linecolor, size=1)+
+  
+  #add max height line
   geom_hline(aes(yintercept=max(ele)),linetype = 'dashed', col = maxlinecol)+
+  
+  #change labels x and y axis
   xlab("Distance (km)")+
   ylab("Elevation (m)")+
-  scale_y_continuous(position = "right", limits = c(0,3500),expand = c(0,0))+
+  
+  #modify the ticks and place of y axis
+  scale_y_continuous(position = "right", limits = c(0,3500), expand = c(0,0))+
+  
+  #further add changes to layout
   theme(panel.grid.minor = element_blank(), 
         panel.grid.major = element_blank(),
         # axis.ticks= element_blank(),
@@ -150,6 +193,7 @@ plot <- ggplot(data=gpx)+
         axis.title.x = element_text(vjust = -2, margin = margin(-0.5,0,0.5,0, unit = 'cm'))
          
   )
+
 suppressWarnings(print(plot))
 
 if(plotsave){suppressMessages(ggsave(plot= plot,
@@ -168,12 +212,4 @@ if(plotsave){suppressMessages(ggsave(plot= plot,
 
 
 # use function ------------------------------------------------------------
-
-setwd(gsub("\\\\","/",r"(C:\Users\user\Desktop)"))
-dir.create("plots")
-setwd("plots")
-getwd()
-
-filepath <- "yilan-wulling.gpx"
-
-elevationprofile(filepath, plotsave = F)
+elevationprofile("yilan-wulling.gpx", plotsave = T)
