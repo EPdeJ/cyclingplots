@@ -1,6 +1,6 @@
 # cyclingplots
 to make cycling plots
-<img src="https://github.com/EPdeJ/cyclingplots/">
+<img src="https://github.com/EPdeJ/cyclingplots/blob/main/Yilan-Wulling.png">
 
 
 ## NOTES FOR FUNCTION USE
