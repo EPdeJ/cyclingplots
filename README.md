@@ -1,5 +1,5 @@
 # cyclingplots
-Erik and Uncle R teach you how to make beautiful cycling plots. Like this one!
+Here's how to make beautiful cycling plots. Like this one!
 <img src="https://github.com/EPdeJ/cyclingplots/blob/main/Yilan-Wulling.png">
 
 
