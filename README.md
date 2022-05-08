@@ -1,5 +1,6 @@
 # cyclingplots
-to make cycling plots 
+to make cycling plots
+<img src="https://github.com/EPdeJ/cyclingplots/">
 
 
 ## NOTES FOR FUNCTION USE
