@@ -23,7 +23,7 @@ Here's how to make beautiful cycling plots. Like this one!
 - `plotsave` and `plotname` can be set to save the plot automatically with **plotsave** as logical. Plots will be saved in the working directory.
 - `plotsavedimentiondpisstr` sets dimensions and dpi for the plot to save. Needs a string of 4 with width, height, unit and dpi
 
-### DEtails
+### Details
 - 6 levels have been set as categories for the area under the curve colors, based on the following grade categories:
   - -Inf to 0 %
   - 0 to 2.5 %
@@ -34,4 +34,17 @@ Here's how to make beautiful cycling plots. Like this one!
   
   The levels can be adjusted with `colorscalestr` with sting length 6. (example: c(-Inf, 0, 2.5, 5, 7.5, 10, Inf))
 - For `gpxrolling`, smaller numbers will  make the plot more detailed (smaller facets), but note that the plotting will take longer. For example, if a gpx file only contains a climb of 2500 geometry points, and the rolling average will be set to 2500, then the gradient calculated will just be the gradient for the full climb, hence the plot will only contain one facet. 
+
 ### Note
+
+#### Future planning
+- add support for gpx files without elevation values
+- make the facets of `gpxrolling` more smooth:
+  - get rid of the white spaces that sometimes occur
+  - make the facets straight (an 90 degree angle on the x axis)
+- include in same function or other:
+  - data summary
+  - map (static)
+- make shiny app from function with:
+  - interactive map support
+
