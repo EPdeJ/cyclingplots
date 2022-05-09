@@ -53,7 +53,7 @@ elevationprofile("test.gpx,                         #set filepath including .gpx
                  )
                   
 ```
-<img src="https://github.com/EPdeJ/cyclingplots/blob/main/test.png" width="25%">
+<img src="https://github.com/EPdeJ/cyclingplots/blob/main/test.png" width="25%" height="auto">
 
 #### Future planning
 - add support for gpx files without elevation values
