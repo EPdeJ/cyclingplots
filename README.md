@@ -42,6 +42,9 @@ Here's how to make beautiful cycling plots. Like this one!
 - make the facets of `gpxrolling` more smooth:
   - get rid of the white spaces that sometimes occur
   - make the facets straight (an 90 degree angle on the x axis)
+  
+  *Especially noticable for smaller rides and runs, see for example this strava export of a 14 km run:*
+  <img src="https://github.com/EPdeJ/cyclingplots/blob/main/strava run.png">
 - include in same function or other:
   - data summary
   - map (static)
