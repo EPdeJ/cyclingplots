@@ -31,6 +31,7 @@ Here's how to make beautiful cycling plots. Like this one!
   - 5 to 7.5 %
   - 7.5 to 10 %
   - 10 to Inf %
-  The levels be adjusted with `colorscalestr` with sting length 6. (example: c(-Inf, 0, 2.5, 5, 7.5, 10, Inf))
+  
+  The levels can be adjusted with `colorscalestr` with sting length 6. (example: c(-Inf, 0, 2.5, 5, 7.5, 10, Inf))
 - For `gpxrolling`, smaller numbers will  make the plot more detailed (smaller facets), but note that the plotting will take longer. For example, if a gpx file only contains a climb of 2500 geometry points, and the rolling average will be set to 2500, then the gradient calculated will just be the gradient for the full climb, hence the plot will only contain one facet. 
 ### Note
