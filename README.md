@@ -38,7 +38,8 @@ Here's how to make beautiful cycling plots. Like this one!
 ### Note
 
 #### Examples
-```
+
+```{r elevation-plot, dev='png',message=FALSE}
 elevationprofile("gpx/crazy ride.gpx") # simple use, using standard presets 
 
 elevationprofile("test.gpx,                                        #set filepath including .gpx
@@ -50,6 +51,7 @@ elevationprofile("test.gpx,                                        #set filepath
                  plotname="Test",                                 #Name of plot to save
                  ggsavepar=c(10,10,"cm",150)       #dimensions of plot to save, unit and dpi's
                  )
+                  <img src="https://github.com/EPdeJ/cyclingplots/blob/main/test.png">
 ```
 
 #### Future planning
