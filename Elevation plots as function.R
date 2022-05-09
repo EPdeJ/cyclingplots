@@ -16,7 +16,7 @@ elevationprofile <- function(filepath,
                              elevationbreaksstr=c(-Inf, 0, 2.5, 5, 7.5, 10, Inf), 
                              plotsave=F,
                              plotname="empty",
-                             plotsavedimentiondpisstr=c(24,10,"cm",300)){
+                             ggsavepar=c(24,10,"cm",300)){
                       
                     
 #_________________________import gpx_____________________________________________________________
@@ -158,10 +158,10 @@ suppressWarnings(print(plot))
 
 if(plotsave){suppressMessages(ggsave(plot= plot,
                     paste0(plotname,".png"),
-                    width = as.numeric(plotsavedimentiondpisstr[1]),
-                    height = as.numeric(plotsavedimentiondpisstr[2]),
-                    units =plotsavedimentiondpisstr[3],
-                    dpi = as.numeric(plotsavedimentiondpisstr[4]),
+                    width = as.numeric(ggsavepar[1]),
+                    height = as.numeric(ggsavepar[2]),
+                    units =ggsavepar[3],
+                    dpi = as.numeric(ggsavepar[4]),
                     type = "cairo-png",
                     bg = "transparent" ))}
 
@@ -180,5 +180,5 @@ elevationprofile("gpx/crazy ride.gpx",                                        #s
                  transparency=.7,                                 #set transparency
                  plotsave=T,                                      #save plot in wd
                  plotname="Test",                                 #Name of plot to save
-                 plotsavedimentiondpisstr=c(10,10,"cm",150)       #dementions of plot to save, unit and dpi's
+                 ggsavepar=c(10,10,"cm",150)       #dementions of plot to save, unit and dpi's
 )

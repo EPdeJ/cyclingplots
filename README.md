@@ -21,7 +21,7 @@ Here's how to make beautiful cycling plots. Like this one!
 - `transparency` set the transparency of the area under the curve
 - `elevationbreaksstr` sets the how the rolling gradient should be divided in different levels of difficulty
 - `plotsave` and `plotname` can be set to save the plot automatically with **plotsave** as logical. Plots will be saved in the working directory.
-- `plotsavedimentiondpisstr` sets dimensions and dpi for the plot to save. Needs a string of 4 with width, height, unit and dpi
+- `ggsavepar` sets dimensions and dpi for the plot to save. Needs a string of 4 with width, height, unit and dpi
 
 ### Details
 - 6 levels have been set as categories for the area under the curve colors, based on the following grade categories:
@@ -48,7 +48,7 @@ elevationprofile("test.gpx,                                        #set filepath
                  transparency=.7,                                 #set transparency
                  plotsave=T,                                      #save plot in wd
                  plotname="Test",                                 #Name of plot to save
-                 plotsavedimentiondpisstr=c(10,10,"cm",150)       #dementions of plot to save, unit and dpi's
+                 ggsavepar=c(10,10,"cm",150)       #dimensions of plot to save, unit and dpi's
                  )
 ```
 
