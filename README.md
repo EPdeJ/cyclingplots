@@ -42,17 +42,18 @@ Here's how to make beautiful cycling plots. Like this one!
 ```{r elevation-plot, dev='png',message=FALSE}
 elevationprofile("gpx/crazy ride.gpx") # simple use, using standard presets 
 
-elevationprofile("test.gpx,                                        #set filepath including .gpx
-                 gpxrolling=50,                                   #set roling parameter, standard value is 10
-                 linecolor="red",                                 #color of elevation profile line
-                 maxlinecol="green",                              #color of the max line
-                 transparency=.7,                                 #set transparency
-                 plotsave=T,                                      #save plot in wd
-                 plotname="Test",                                 #Name of plot to save
-                 ggsavepar=c(10,10,"cm",150)       #dimensions of plot to save, unit and dpi's
+elevationprofile("test.gpx,                         #set filepath including .gpx
+                 gpxrolling=50,                     #set roling parameter, standard value is 10
+                 linecolor="red",                   #color of elevation profile line
+                 maxlinecol="green",                #color of the max line
+                 transparency=.7,                   #set transparency
+                 plotsave=T,                        #save plot in wd
+                 plotname="Test",                   #Name of plot to save
+                 ggsavepar=c(10,10,"cm",150)        #dimensions of plot to save, unit and dpi's
                  )
-                  <img src="https://github.com/EPdeJ/cyclingplots/blob/main/test.png">
+                  
 ```
+<img src="https://github.com/EPdeJ/cyclingplots/blob/main/test.png" width="25%">
 
 #### Future planning
 - add support for gpx files without elevation values
