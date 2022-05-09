@@ -1,4 +1,4 @@
-# Header 1 cyclingplots
+# Cycling plots
 Here's how to make beautiful cycling plots. Like this one!
 <img src="https://github.com/EPdeJ/cyclingplots/blob/main/Yilan-Wulling.png">
 
@@ -9,7 +9,7 @@ Here's how to make beautiful cycling plots. Like this one!
 - 6 levels have been set as categories for the area under the curve colors
 - sf package is used to import the gpx, rolling averages are calculated by the zoo package
  
-## ---------------parameters to set---------------------------
+### Parameters to set
 - `filepath` need to be set to locate the gpx file, for example "C:/Users/user/Desktop/yilan-wulling.gpx"
 
 - `gpxrolling` will define the roling avarage based on the number of gps point and thereby the level/detail of the gradient #' brackets. Smaller numbers will  make it more detailed, the plotting will take longer. For example, if a gpx file contains 2500 points, and the rolling average will be set to 2500, then the gradient will just be the gradeint for the full climb.
