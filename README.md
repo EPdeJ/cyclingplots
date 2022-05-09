@@ -1,4 +1,4 @@
-# cyclingplots
+# Header 1 cyclingplots
 Here's how to make beautiful cycling plots. Like this one!
 <img src="https://github.com/EPdeJ/cyclingplots/blob/main/Yilan-Wulling.png">
 
