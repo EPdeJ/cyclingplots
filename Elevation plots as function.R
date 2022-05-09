@@ -172,4 +172,13 @@ if(plotsave){suppressMessages(ggsave(plot= plot,
 
 
 # use function ------------------------------------------------------------
-elevationprofile("gpx/crazy ride.gpx",plotname = "test", gpxrolling = 100, plotsave = T)
+elevationprofile("gpx/crazy ride.gpx",plotname = "test", gpxrolling = 50, plotsave = T)
+elevationprofile("gpx/crazy ride.gpx",                                        #set filepath including .gpx
+                 gpxrolling=50,                                   #set roling parameter, standard value is 10
+                 linecolor="red",                                 #color of elevation profile line
+                 maxlinecol="green",                              #color of the max line
+                 transparency=.7,                                 #set transparency
+                 plotsave=T,                                      #save plot in wd
+                 plotname="Test",                                 #Name of plot to save
+                 plotsavedimentiondpisstr=c(10,10,"cm",150)       #dementions of plot to save, unit and dpi's
+)

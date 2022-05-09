@@ -41,18 +41,20 @@ Here's how to make beautiful cycling plots. Like this one!
 ```
 elevationprofile("gpx/crazy ride.gpx") # simple use, using standard presets 
 
-elevationprofile(filepath,
-                 gpxrolling=10,
-                 linecolor="red",
-                 maxlinecol="green",
-                 transparency=.7,
-                 plotsave=T,
-                 plotname="Test",
-                 plotsavedimentiondpisstr=c(10,10,"cm",150)
+elevationprofile("test.gpx,                                        #set filepath including .gpx
+                 gpxrolling=50,                                   #set roling parameter, standard value is 10
+                 linecolor="red",                                 #color of elevation profile line
+                 maxlinecol="green",                              #color of the max line
+                 transparency=.7,                                 #set transparency
+                 plotsave=T,                                      #save plot in wd
+                 plotname="Test",                                 #Name of plot to save
+                 plotsavedimentiondpisstr=c(10,10,"cm",150)       #dementions of plot to save, unit and dpi's
+                 )
 ```
 
 #### Future planning
 - add support for gpx files without elevation values
+- option to hide max height line
 - make the facets of `gpxrolling` more smooth:
   - get rid of the white spaces that sometimes occur
   - make the facets straight (an 90 degree angle on the x axis)
