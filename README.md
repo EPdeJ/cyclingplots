@@ -37,6 +37,20 @@ Here's how to make beautiful cycling plots. Like this one!
 
 ### Note
 
+#### Examples
+```
+elevationprofile("gpx/crazy ride.gpx") # simple use, using standard presets 
+
+elevationprofile(filepath,
+                 gpxrolling=10,
+                 linecolor="red",
+                 maxlinecol="green",
+                 transparency=.7,
+                 plotsave=T,
+                 plotname="Test",
+                 plotsavedimentiondpisstr=c(10,10,"cm",150)
+```
+
 #### Future planning
 - add support for gpx files without elevation values
 - make the facets of `gpxrolling` more smooth:
@@ -50,4 +64,5 @@ Here's how to make beautiful cycling plots. Like this one!
   - map (static)
 - make shiny app from function with:
   - interactive map support
+
 
