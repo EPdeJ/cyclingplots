@@ -1,8 +1,15 @@
 # Cycling plots
 
+**this is work in progress**
+
 ### Description
 Here's how to make beautiful cycling plots. Like this one!
-<img src="https://github.com/EPdeJ/cyclingplots/blob/main/Yilan-Wulling.png">
+<img src="https://github.com/EPdeJ/cyclingplots/blob/main/N1-1_Wufenshan.png">
+
+or
+
+<img src="https://github.com/EPdeJ/cyclingplots/blob/main/N1-2_Wufenshan Buyanting loop.png">
+
 
 ### Usage
  
@@ -12,16 +19,24 @@ Here's how to make beautiful cycling plots. Like this one!
 - for now, elevation is needed as a variable in the gpx files, later support for gpx files without elevation will be added. 
  
 ### Arguments
+                                                   
 - `filepath` need to be set to locate the gpx file, for example "C:/Users/user/Desktop/yilan-wulling.gpx"
-- `gpxrolling` will define the rolling average based on the number of gps point and thereby the level/detail of the gradient facets. 
-- `coleasy` will set the color of the downhill part
-- `colorscalestr` will set the colors of the gradient levels. String length 6.
+- `seq` factor to reduce the number of datapoints in a GPX file (especially usefull for calculations of gradients over longer streches)(default=10)
+- `roll` how many point shoulc be used in the calculation of rolling averages (default is 10)
+- `rollparameter` use max or mean method for rolling averages (default is "max")
+- `colorscalestr` will set the colors of the gradient levels. String length 6. First color is downhill or no gradient. (default"#9198A7","#C9E3B9", "#F9D49D", "#F7B175", "#F47D85", "#990000")
 - `linecolor` set the color of the height profile
 - `maxlinecol` sets the color of the maximum height line 
 - `transparency` set the transparency of the area under the curve
 - `elevationbreaksstr` sets the how the rolling gradient should be divided in different levels of difficulty
-- `plotsave` and `plotname` can be set to save the plot automatically with **plotsave** as logical. Plots will be saved in the working directory.
-- `ggsavepar` sets dimensions and dpi for the plot to save. Needs a string of 4 with width, height, unit and dpi
+- `plotsave`, `plotsavedir` and `plotname` can be set to save the plot automatically with **plotsave** as logical. Plots will be saved in the working directory. If none is provided working dir and gpx file name will be used.
+- `ggsave_width` set the width of the plot to save
+- `ggsave_height` set the height of the plot to save
+- `ggsave_dpi` set the dots per inch
+- `ggsave_units` set the units uses for height and width (default to "cm")
+- `ggsave_background` option to use "transparent"
+                          
+  
 
 ### Details
 - 6 levels have been set as categories for the area under the curve colors, based on the following grade categories:
