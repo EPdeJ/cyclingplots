@@ -73,9 +73,7 @@ elevationprofile("test.gpx,                         #set filepath including .gpx
 #### Future planning
 - add support for gpx files without elevation values
 - option to hide max height line
-- make the facets of `gpxrolling` more smooth:
-  - get rid of the white spaces that sometimes occur
-  - make the facets straight (an 90 degree angle on the x axis)
+- AUC shaded for gradients parameters such as roll and limiting the number of gpx datapoint make the graph now smoother. The innitial problem with the white spaces that sometimes occured and the non straight facets (not 90 degree angle on the x axis) have been patched but the solution is not ideal (setting the y coordinated to -1000000 for the kilometers not in the gradient group)
   
   *Especially noticable for smaller rides and runs, see for example this strava export of a 14 km run:*
   <img src="https://github.com/EPdeJ/cyclingplots/blob/main/strava run.png">
