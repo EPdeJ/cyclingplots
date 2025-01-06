@@ -38,7 +38,7 @@ elevationprofile <- function(filepath,
                              maxlinecol="red",
                              transparency=1,
                              plotsave=F,
-                             plotsavedir="",
+                             plotsavedir=NULL,
                              plotname="",
                              ggsave_width=24,
                              ggsave_height=10,
@@ -344,10 +344,11 @@ plot
 
 
 # use function ------------------------------------------------------------
-elevationprofile(S.gpxlist[1],
-                 plotsavedir = "C:/Users/erik6/OneDrive/Desktop/test", 
+elevationprofile(S.gpxlist[2],
+                 
                  roll = 7, 
                  seq=10,
-                 plotsave = F,  
+                 plotsave = T,  
                  rollparameter="mean")
 
+plotsavedir = "C:/Users/erik6/OneDrive/Desktop/test", 
