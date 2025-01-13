@@ -21,8 +21,7 @@
 
 # load packages and filepaths ---------------------------------------------
 pacman::p_load(tidyverse,sf,zoo,Cairo, scales)
-S.path <- "G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/gpx"
-S.gpxlist <- list.files(path = S.path, pattern = "\\.gpx$", full.names = T)
+
 
 
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -113,19 +112,7 @@ gpx<- gpx %>%
                                   label=c("downhill or flat","<3%","3-6%", "6-9%", "9-12%",">12%"),
                                   include.lowest=T,
                                   ordered_result=T)
-    ) %>% 
-  mutate(gradient_max_fill = as.factor(case_when(gradient_roll_max_binned == "downhill or flat" ~ colorscalestr[1],
-                                       gradient_roll_max_binned == "<3%" ~ colorscalestr[2],
-                                       gradient_roll_max_binned == "3-6%" ~ colorscalestr[3],
-                                       gradient_roll_max_binned == "6-9%" ~ colorscalestr[4],
-                                       gradient_roll_max_binned == "9-12%" ~ colorscalestr[5],
-                                       gradient_roll_max_binned == ">12%" ~ colorscalestr[6],
-                                       TRUE ~ "red"))) 
-gpx <- gpx %>% 
-  mutate(ele_three=case_when(gradient_roll_max_binned == "<3%" ~ ele,
-                             TRUE ~ -2000),
-         dist_three=case_when(gradient_roll_max_binned == "<3%" ~ distance_total,
-                             TRUE ~ distance_total))
+    ) 
   
 gpx <- gpx %>% st_drop_geometry()
 mem <- gpx
@@ -282,13 +269,13 @@ plot <- ggplot(data=gpx)+
                                 paste0(round(rib2ele,0), " m"),
                                 paste0(round(rib3ele,0), " m"),
                                 paste0(round(maxele,0), " m \n(Highest Point)")),
-                     expand = c(0,0)
+                     expand = c(0,1)
                      )+ 
   scale_x_continuous(
     breaks = c(seq(0, maxdist/1000, by = 10),maxdist/1000), 
     labels = paste0(c(seq(0, maxdist/1000, by = 10),round(maxdist/1000,0)), " Km"), 
     minor_breaks = NULL,
-    expand = c(0,1)
+    expand = c(0,1.5)
   ) +
 
 
@@ -344,11 +331,22 @@ plot
 
 
 # use function ------------------------------------------------------------
-elevationprofile(S.gpxlist[2],
-                 
+S.path <- "G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/gpx/north"
+S.gpxlist <- list.files(path = S.path, pattern = "\\.gpx$", full.names = T)
+
+for (i in S.gpxlist) {
+elevationprofile(i,
+                 plotsavedir = "G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/elevation plots/north",
                  roll = 7, 
                  seq=10,
                  plotsave = T,  
                  rollparameter="mean")
+}
 
-plotsavedir = "C:/Users/erik6/OneDrive/Desktop/test", 
+
+elevationprofile(S.gpxlist[10],
+                 plotsavedir = "G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/elevation plots/north",
+                 roll = 10, 
+                 seq=10,
+                 plotsave = F,  
+                 rollparameter="mean")
