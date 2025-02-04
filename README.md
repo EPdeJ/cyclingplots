@@ -19,10 +19,8 @@ or make a nice map plotting the route in a leaflet map:
 ### Usage in short:
 
 * This repository contains two R code snippets containing functions to make:
-
-+ An elevation profile based on any gpx file
-+ A map displaying the route in a leaflet map (with JAWG-lagoon baselayer)
-
+    + An elevation profile based on any gpx file
+    + A map displaying the route in a leaflet map (with JAWG-lagoon baselayer)
 * The sf package is used to uniformly import the gpx files.
 * Rolling averages are calculated with the zoo package
 * For now, elevation is needed as a variable in the gpx files, later support for gpx files without elevation will be added.
