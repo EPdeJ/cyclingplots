@@ -5,7 +5,7 @@
 ### Description
 
 Here's how to make beautiful cycling height profiles. Like this one!
-<img src="https://github.com/EPdeJ/cyclingplots/blob/main/N1-1_Wufenshan.png">
+<img src="https://github.com/EPdeJ/cyclingplots/blob/main/N1-1_Wufenshan.png" width="75%" height="auto">
 
 and this one:
 
