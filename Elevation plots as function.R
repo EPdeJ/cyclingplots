@@ -168,9 +168,9 @@ plot <- ggplot(data=gpx)+
   geom_ribbon(aes(x=distance_total/1000, 
                   ymax={ 
                     if (rollparameter == "max") { # Use gradient_roll_max_binned to evaluate gradient group
-                      ifelse(gradient_roll_max_binned == "<3%", ele, -1000000)
+                      ifelse(gradient_roll_max_binned == "<3%", ele, -Inf)
                     } else if (rollparameter == "mean") { # Use gradient_roll_mean_binned to evaluate gradient group
-                      ifelse(gradient_roll_mean_binned == "<3%", ele, -1000000)
+                      ifelse(gradient_roll_mean_binned == "<3%", ele, -Inf)
                     } else { NA_real_ 
                       warning("Invalid rollparameter specified. Select either \"max\" or \"mean\"") #Give a warning to the user
                     }
@@ -184,9 +184,9 @@ plot <- ggplot(data=gpx)+
   geom_ribbon(aes(x=distance_total/1000, 
                   ymax={ 
                     if (rollparameter == "max") { # Use gradient_roll_max_binned to evaluate gradient group
-                      ifelse(gradient_roll_max_binned == "3-6%", ele, -1000000)
+                      ifelse(gradient_roll_max_binned == "3-6%", ele, -Inf)
                     } else if (rollparameter == "mean") { # Use gradient_roll_mean_binned to evaluate gradient group
-                      ifelse(gradient_roll_mean_binned == "3-6%", ele, -1000000)
+                      ifelse(gradient_roll_mean_binned == "3-6%", ele, -Inf)
                     } 
                   },
                   ymin=0),
@@ -198,9 +198,9 @@ plot <- ggplot(data=gpx)+
   geom_ribbon(aes(x=distance_total/1000, 
                   ymax={ 
                     if (rollparameter == "max") { # Use gradient_roll_max_binned to evaluate gradient group
-                      ifelse(gradient_roll_max_binned == "6-9%", ele, -1000000)
+                      ifelse(gradient_roll_max_binned == "6-9%", ele, -Inf)
                     } else if (rollparameter == "mean") { # Use gradient_roll_mean_binned to evaluate gradient group
-                      ifelse(gradient_roll_mean_binned == "6-9%", ele, -1000000)
+                      ifelse(gradient_roll_mean_binned == "6-9%", ele, -Inf)
                     } 
                   },
                   ymin=0),
@@ -212,9 +212,9 @@ plot <- ggplot(data=gpx)+
   geom_ribbon(aes(x=distance_total/1000, 
                   ymax={ 
                     if (rollparameter == "max") { # Use gradient_roll_max_binned to evaluate gradient group
-                      ifelse(gradient_roll_max_binned == "9-12%", ele, -1000000)
+                      ifelse(gradient_roll_max_binned == "9-12%", ele, -Inf)
                     } else if (rollparameter == "mean") { # Use gradient_roll_mean_binned to evaluate gradient group
-                      ifelse(gradient_roll_mean_binned == "9-12%", ele, -1000000)
+                      ifelse(gradient_roll_mean_binned == "9-12%", ele, -Inf)
                     } 
                   },
                   ymin=0),
@@ -226,9 +226,9 @@ plot <- ggplot(data=gpx)+
   geom_ribbon(aes(x=distance_total/1000, 
                   ymax={ 
                     if (rollparameter == "max") { # Use gradient_roll_max_binned to evaluate gradient group
-                      ifelse(gradient_roll_max_binned == ">12%", ele, -1000000)
+                      ifelse(gradient_roll_max_binned == ">12%", ele, -Inf)
                     } else if (rollparameter == "mean") { # Use gradient_roll_mean_binned to evaluate gradient group
-                      ifelse(gradient_roll_mean_binned == ">12%", ele, -1000000)
+                      ifelse(gradient_roll_mean_binned == ">12%", ele, -Inf)
                     } 
                   },
                   ymin=0),
@@ -322,9 +322,19 @@ elevationprofile(i,
 }
 
 
-elevationprofile(S.gpxlist[10],
-                 plotsavedir = "G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/elevation plots/north",
-                 roll = 10, 
-                 seq=10,
-                 plotsave = F,  
-                 rollparameter="mean")
+elevationprofile(filedir,
+                 seq=2,
+                 roll=15,
+                 rollparameter="max",
+                 colorscalestr=c("lightblue","lightgreen", "green", "pink", "orange", "darkred"),
+                 linecolor="red",
+                 maxlinecol="darkblue",
+                 transparency=.7,
+                 plotsave=T,
+                 plotsavedir=NULL,
+                 plotname="Steep steeper steepst",
+                 ggsave_width=24,
+                 ggsave_height=10,
+                 ggsave_dpi=300,
+                 ggsave_units="cm",
+                 ggsave_background="transparent")
