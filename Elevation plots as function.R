@@ -1,30 +1,8 @@
 # see https://github.com/EPdeJ/cyclingplots#readme for more information
-
-# we're going to use Jawg.Lagoon as base layer for maps in leaflet
-#' idea for smoothing less data points but without loosing the highest elevation point
-#' idea for one peak (not sure if its a problem if we lose the max of smaller peaks):
-#' devide the gpx file in 5 parts, in the following order
-#' --> 1 row of the start elevation
-#' --> rows with elevations leading up to the peak, number of datapoints can be made smaller
-#' --> 1 peak row
-#' --> rows with elevations leading up to the finnish, number of datapoints can be made smaller
-#' --> finnish elevation
-#' rowbind after
-#' 
-#' or use rollmax instead
-#' 
-#' question: smoothning can not be done by distance as it's irregularly distributed by km
-#' 
-#' write a function for rolling avg
-
-
+# currently Jawg.Lagoon as base layer for maps in leaflet
 
 # load packages and filepaths ---------------------------------------------
 pacman::p_load(tidyverse,sf,zoo,Cairo, scales)
-
-
-
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 # function elevation profile -------------------------------------------------------
 # set start parameters for function
