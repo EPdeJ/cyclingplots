@@ -1,22 +1,29 @@
 # see https://github.com/EPdeJ/cyclingplots#readme for more information
+# currently Jawg.Lagoon as base layer for maps in leaflet
+
 
 roll=7
 colorscalestr=c("#9198A7","#C9E3B9", "#F9D49D", "#F7B175", "#F47D85", "#990000")
-
+gpxnr <- 2
+remotes::install_github("r-spatial/mapview")
 # add stamen key
 register_stadiamaps("{your key}", write = TRUE)
 
 # load packages and filepaths ---------------------------------------------
-pacman::p_load(tidyverse,sf,ggmap,zoo,rosm,colorspace,ggspatial)
+pacman::p_load(tidyverse,sf,ggmap,zoo,rosm,colorspace,ggspatial,tmap,maptiles,leaflet,leaflet.extras2,utils,htmltools,mapview,webshot2)
 
 S.path <- "G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/gpx/north"
 S.gpxlist <- list.files(path = S.path, pattern = "\\.gpx$", full.names = T)
 
+
+
+
+makemap <- function(gpxnr, start="left", finish="right", lijnkleur="#640c82", trans=1,labeldirection){
 # get track layer from gpx
-track <- st_read(S.gpxlist[10], layer = "tracks")
+track <- st_read(S.gpxlist[gpxnr], layer = "tracks")
 
 # get points from gpx
-gps <- st_read(S.gpxlist[10], layer = "track_points") %>% 
+gps <- st_read(S.gpxlist[gpxnr], layer = "track_points") %>% 
   mutate(dist_to_lead_m=c(0,lag(st_distance(geometry,lead(geometry),by_element = TRUE))[-1])) %>% 
   select(track_seg_point_id, ele,geometry,dist_to_lead_m) #select the usefull rows
 
@@ -39,14 +46,6 @@ gps<- gps %>%
     gradient=(elevation_diff/distance_diff)*100
   ) # elevation can be negative so only cum sum when positive 
 
-# WORK IN PROGRESS (if seq is defined it will reduce the number of datapoints from the gpx)
-if(seq){
-  max_ele_index <- which.max(gps$ele)
-  n_rows <- nrow(gps)
-  intermediate_rows <- seq(from = 1 + seq, to = n_rows - 1, by = seq)
-  rows_to_select <- unique(sort(c(1, max_ele_index, n_rows, intermediate_rows)))
-  gps <- gps %>% slice(rows_to_select)
-}
 
 # calculate rolling averages
 gps<- gps %>% 
@@ -94,36 +93,111 @@ gps<- gps %>%
                                      gradient_roll_mean_binned == ">12%" ~ colorscalestr[6],
                                      TRUE ~ NA))
 
+# load start and finisiconList(oceanIcons <- iconList(
+cycleIcons <- iconList(
+  start = makeIcon(
+    iconUrl = "G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/bike icon start.png",
+    iconWidth = 50, iconHeight = 50,
+    iconAnchorX = 0, iconAnchorY = 20
+  ),
+  finish = makeIcon(
+    iconUrl = "G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/icon finish.png",
+    iconWidth = 50, iconHeight = 50,
+    iconAnchorX = 0, iconAnchorY = "20m"
+  )
+)
 
-# Create bounding box (set limits for area)
-bbox <- make_bbox(range(gps$lon), range(gps$lat))
-
-# get the base-layer
-map_layer <- get_stadiamap(bbox = bbox,
-                            center = c(mean(range(gps$lon)),
-                                       mean(gps(gps$lat))), 
-                            zoom=11,
-                            maptype = "outdoors"
-                            )
-# create distance markers/labels
+# calculate distance markers
 distance_markers <- 
-  gps %>% 
-  mutate(dist_m_cumsum = cumsum(dist_to_lead_m)) %>%
-  mutate(dist_m_cumsum_km_floor = floor(dist_m_cumsum / 10000)*10) %>%
-  group_by(dist_m_cumsum_km_floor) %>%
-  filter(row_number() == 1, dist_m_cumsum_km_floor > 0) 
+  gps %>% st_drop_geometry() %>% 
+  mutate(km_label = 10*floor(distance_total / 10000)) %>%
+  group_by(km_label) %>%
+  filter(row_number() == 1, km_label > 0) %>% 
+  select(distance_total, lon,lat,km_label )
+distance_markers$km_label <- paste(distance_markers$km_label, " Km")
 
-# make plot (baselayer + points as track + distance layer)
-plot <- 
-  ggmap(map_layer)+
-  geom_path(data = gps, aes(lon, lat, colour = ele),
-            linewidth = 1,
-            lineend = "round") +
-  geom_label(data = distance_markers, aes(lon, lat, label = dist_m_cumsum_km_floor),
-             size = 3) +
-  scale_color_continuous_sequential(palette = "Viridis")+
-  labs(x = "Longitude", 
-       y = "Latitude", 
-       color = "Elev. [m]",
-       title = "Plot with elevation")
-plot
+# make leaflet map
+map <- leaflet(track) %>% 
+  addTiles(urlTemplate = "https://tile.jawg.io/jawg-lagoon/{z}/{x}/{y}{r}.png?access-token=rOxSZvE2ZGMa3Aa7f0RXfPKvTgzdXsXPOStoRJ6ECZMySQgiIoBS34xehcFZWRCV",
+           attribution = "<a href=\"https://www.jawg.io?utm_medium=map&utm_source=attribution\" target=\"_blank\">&copy; Jawg</a> - <a href=\"https://www.openstreetmap.org?utm_medium=map-attribution&utm_source=jawg\" target=\"_blank\">&copy; OpenStreetMap</a>&nbsp;contributors") %>% 
+  addMiniMap(tiles ="https://tile.jawg.io/jawg-lagoon/{z}/{x}/{y}{r}.png?access-token=rOxSZvE2ZGMa3Aa7f0RXfPKvTgzdXsXPOStoRJ6ECZMySQgiIoBS34xehcFZWRCV",
+             aimingRectOptions = list(color = "#23b09d", weight = 1, clickable = FALSE),) %>% 
+  addPolylines(color = lijnkleur,weight = 3,opacity = trans) %>% 
+  
+  addLabelOnlyMarkers(lng = distance_markers$lon, lat = distance_markers$lat,
+             label = distance_markers$km_label,
+             labelOptions = labelOptions(noHide = TRUE, 
+                                         direction = labeldirection,
+                                         opacity = .8,
+                                         style = list(
+                                           "color" = "#23b09d",
+                                           "font-family" = "noto sans",
+                                           "font-style" = "regular",
+                                           "box-shadow" = "3px 3px rgba(0,0,0,0.25)",
+                                           "font-size" = "12px",
+                                           "border-color" = "rgba(0,0,0,0.5)"
+                                         )) 
+             
+                      ) %>% 
+  addLabelOnlyMarkers(lng = gps$lon[1],lat = gps$lat[1],
+                    label = "Start",
+                    labelOptions = labelOptions(noHide = TRUE, 
+                                                direction = start,
+                                                opacity = .8,
+                                                style = list(
+                                                  "color" = "White",
+                                                  "font-family" = "noto sans",
+                                                  "font-style" = "regular",
+                                                  "box-shadow" = "3px 3px rgba(0,0,0,0.25)",
+                                                  "font-size" = "12px",
+                                                  "border-color" = "#23b09d",
+                                                  "background"="#23b09d"
+                                                )) 
+                      ) %>% 
+  addLabelOnlyMarkers( lng = gps$lon[max(nrow(gps))],lat = gps$lat[max(nrow(gps))],
+                      label = "Finnish",
+                      labelOptions = labelOptions(noHide = TRUE, 
+                                                  direction = finish,
+                                                  opacity = .8,
+                                                  style = list(
+                                                    "color" = "White",
+                                                    "font-family" = "noto sans",
+                                                    "font-style" = "regular",
+                                                    "box-shadow" = "3px 3px rgba(0,0,0,0.25)",
+                                                    "font-size" = "12px",
+                                                    "border-color" = "darkred",
+                                                    "background"="darkred"
+                                                  ))
+                        ) %>% 
+  addScaleBar()
+filename <<- tools::file_path_sans_ext(basename(S.gpxlist[gpxnr]))
+map<<-map
+map
+}
+
+
+#use map function
+makemap(3,"botom","bottom", lijnkleur = "#640c82", trans=.7, labeldirection="auto")
+
+# set save dimentions
+factor=4
+plus=0
+breed <- 297.638*factor+plus
+lang <- 365.231*factor+plus
+
+# save plot as png
+mapshot(
+  map,
+  file = paste0("G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/maps/north/",filename,".png"),
+  remove_controls = c("zoomControl", "layersControl", "homeButton",
+                      "drawToolbar", "easyButton"),
+  vwidth = breed, 
+  vheight = lang)
+browseURL(paste0("G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/maps/north/",filename,".png"))
+
+#make gpx list
+routes <- data.frame(
+                     "route"=tools::file_path_sans_ext(basename(S.gpxlist))) %>% arrange(route)
+
+
+  
