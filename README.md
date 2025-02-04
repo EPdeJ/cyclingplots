@@ -92,7 +92,7 @@ elevationprofile("crazy ride.gpx"",
                  ggsave_background="transparent")
                   
 ```
-<img src="https://github.com/EPdeJ/cyclingplots/blob/main/steep steeper steepst.png" width="25%" height="auto">
+<img src="https://github.com/EPdeJ/cyclingplots/blob/main/Steep steeper steepst.png" width="25%" height="auto">
 
 #### Future planning, for current functions:
 - add support for gpx files without elevation values
