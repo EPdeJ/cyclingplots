@@ -7,8 +7,7 @@ colorscalestr=c("#9198A7","#C9E3B9", "#F9D49D", "#F7B175", "#F47D85", "#990000")
 gpxnr <- 2
 remotes::install_github("r-spatial/mapview")
 
-# add Jawg api key
-key <- {"your key"}
+
 
 # load packages and filepaths ---------------------------------------------
 pacman::p_load(tidyverse,sf,ggmap,zoo,rosm,colorspace,ggspatial,tmap,maptiles,leaflet,leaflet.extras2,utils,htmltools,mapview,webshot2)
@@ -16,10 +15,16 @@ pacman::p_load(tidyverse,sf,ggmap,zoo,rosm,colorspace,ggspatial,tmap,maptiles,le
 S.path <- "G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/gpx/north"
 S.gpxlist <- list.files(path = S.path, pattern = "\\.gpx$", full.names = T)
 
+# temp
+gpxnr=2
+lijnkleur="red"
+jawgapi="ScYlimn0DmddEELnlYRgDZ9jWsWLj0VXUQcXKDxQ1d9Cjc1sKDb8FG4h2DZ6FJk2"
+trans=.9
+labeldirection="auto"
+finish="right"
+start="left"
 
-
-
-makemap <- function(gpxnr, start="left", finish="right", lijnkleur="#640c82", trans=1,labeldirection){
+makemap <- function(gpxnr, start="left", finish="right", lijnkleur="#640c82", trans=1,labeldirection,jawgapi=""){
 # get track layer from gpx
 track <- st_read(S.gpxlist[gpxnr], layer = "tracks")
 
@@ -94,19 +99,7 @@ gps<- gps %>%
                                      gradient_roll_mean_binned == ">12%" ~ colorscalestr[6],
                                      TRUE ~ NA))
 
-# load start and finisiconList(oceanIcons <- iconList(
-cycleIcons <- iconList(
-  start = makeIcon(
-    iconUrl = "G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/bike icon start.png",
-    iconWidth = 50, iconHeight = 50,
-    iconAnchorX = 0, iconAnchorY = 20
-  ),
-  finish = makeIcon(
-    iconUrl = "G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/icon finish.png",
-    iconWidth = 50, iconHeight = 50,
-    iconAnchorX = 0, iconAnchorY = "20m"
-  )
-)
+
 
 # calculate distance markers
 distance_markers <- 
@@ -119,10 +112,10 @@ distance_markers$km_label <- paste(distance_markers$km_label, " Km")
 
 # make leaflet map
 map <- leaflet(track) %>% 
-  addTiles(urlTemplate = "https://tile.jawg.io/jawg-lagoon/{z}/{x}/{y}{r}.png?access-token=ScYlimn0DmddEELnlYRgDZ9jWsWLj0VXUQcXKDxQ1d9Cjc1sKDb8FG4h2DZ6FJk2",
+  addTiles(urlTemplate = paste0("https://tile.jawg.io/jawg-lagoon/{z}/{x}/{y}{r}.png?access-token=",jawgapi),
            attribution = "<a href=\"https://www.jawg.io?utm_medium=map&utm_source=attribution\" target=\"_blank\">&copy; Jawg</a> - <a href=\"https://www.openstreetmap.org?utm_medium=map-attribution&utm_source=jawg\" target=\"_blank\">&copy; OpenStreetMap</a>&nbsp;contributors") %>% 
-  addMiniMap(tiles ="https://tile.jawg.io/jawg-lagoon/{z}/{x}/{y}{r}.png?access-token=ScYlimn0DmddEELnlYRgDZ9jWsWLj0VXUQcXKDxQ1d9Cjc1sKDb8FG4h2DZ6FJk2",
-             aimingRectOptions = list(color = "#23b09d", weight = 1, clickable = FALSE),) %>% 
+  addMiniMap(tiles =paste0("https://tile.jawg.io/jawg-lagoon/{z}/{x}/{y}{r}.png?access-token=",jawgapi),
+             aimingRectOptions = list(color = "#23b09d", weight = 1, clickable = FALSE)) %>% 
   addPolylines(color = lijnkleur,weight = 3,opacity = trans) %>% 
   
   addLabelOnlyMarkers(lng = distance_markers$lon, lat = distance_markers$lat,
@@ -176,9 +169,10 @@ map<<-map
 map
 }
 
+test <- as.data.frame(S.gpxlist)
 
 #use map function
-makemap(3,"botom","bottom", lijnkleur = "#640c82", trans=.7, labeldirection="auto")
+makemap(2,"botom","bottom", lijnkleur = "#640c82", trans=.7, labeldirection="auto", jawgapi = "ScYlimn0DmddEELnlYRgDZ9jWsWLj0VXUQcXKDxQ1d9Cjc1sKDb8FG4h2DZ6FJk2")
 
 # set save dimentions
 factor=4
@@ -189,13 +183,13 @@ lang <- 365.231*factor+plus
 # save plot as png
 mapshot(
   map,
-  file = paste0("G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/maps/north/",filename,".png"),
+  file = paste0(filename,"_map.png"),
   remove_controls = c("zoomControl", "layersControl", "homeButton",
                       "drawToolbar", "easyButton"),
   vwidth = breed, 
   vheight = lang)
-browseURL(paste0("G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/maps/north/",filename,".png"))
-
+browseURL(paste0(filename,"_map.png"))
+getwd()
 #make gpx list
 routes <- data.frame(
                      "route"=tools::file_path_sans_ext(basename(S.gpxlist))) %>% arrange(route)

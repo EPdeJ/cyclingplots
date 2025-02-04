@@ -74,30 +74,33 @@ For `gpxrolling`, smaller numbers will  make the plot more detailed (smaller fac
 ```{r elevation-plot, dev='png',message=FALSE}
 elevationprofile("gpx/crazy ride.gpx") # simple use, using standard presets 
 
-elevationprofile("test.gpx,                         #set filepath including .gpx
-                 gpxrolling=50,                     #set roling parameter, standard value is 10
-                 linecolor="red",                   #color of elevation profile line
-                 maxlinecol="green",                #color of the max line
-                 transparency=.7,                   #set transparency
-                 plotsave=T,                        #save plot in wd
-                 plotname="Test",                   #Name of plot to save
-                 ggsavepar=c(10,10,"cm",150)        #dimensions of plot to save, unit and dpi's
-                 )
+elevationprofile("crazy ride.gpx"",
+                 seq=15,
+                 roll=5,
+                 rollparameter="max",
+                 colorscalestr=c("lightblue","lightgreen", "green", "pink", "orange", "darkred"),
+                 linecolor="red",
+                 maxlinecol="darkblue",
+                 transparency=.7,
+                 plotsave=T,
+                 plotsavedir=NULL,
+                 plotname="Steep steeper steepst",
+                 ggsave_width=24,
+                 ggsave_height=10,
+                 ggsave_dpi=300,
+                 ggsave_units="cm",
+                 ggsave_background="transparent")
                   
 ```
-<img src="https://github.com/EPdeJ/cyclingplots/blob/main/test.png" width="25%" height="auto">
+<img src="https://github.com/EPdeJ/cyclingplots/blob/main/steep steeper steepst.png" width="25%" height="auto">
 
-#### Future planning
+#### Future planning, for current functions:
 - add support for gpx files without elevation values
-- option to hide max height line
-- AUC shaded for gradients parameters such as roll and limiting the number of gpx datapoint make the graph now smoother. The innitial problem with the white spaces that sometimes occured and the non straight facets (not 90 degree angle on the x axis) have been patched but the solution is not ideal (setting the y coordinated to -1000000 for the kilometers not in the gradient group)
+- option to hide elevation lines
+- fix order of horizontal elevation lines
+- create a shiny app of both functions
+- generate a package based on both function
+
   
-  *Especially noticable for smaller rides and runs, see for example this strava export of a 14 km run:*
-  <img src="https://github.com/EPdeJ/cyclingplots/blob/main/strava run.png">
-- include in same function or other:
-  - data summary
-  - map (static)
-- make shiny app from function with:
-  - interactive map support
 
 
