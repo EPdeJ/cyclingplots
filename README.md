@@ -55,16 +55,17 @@ or make a nice map plotting the route in a leaflet map:
 * `jawgapi` set you personal api token, get one [at JAWG](https://www.jawg.io/lab/access-tokens) 
 
 ### Details
-- 6 levels have been set as categories for the area under the curve colors, based on the following grade categories:
-  - -Inf to 0 %
-  - 0 to 2.5 %
-  - 2.5 tot 5 %
-  - 5 to 7.5 %
-  - 7.5 to 10 %
-  - 10 to Inf %
+6 levels have been set as categories for the area under the curve colors, based on the following grade categories:
+  + downhill or flat
+  + gradient "<3%"
+  + gradient "3-6%"
+  + gradient "6-9%"
+  + gradient "9-12%"
+  + gradient ">12%"
   
-  The levels can be adjusted with `colorscalestr` with sting length 6. (example: c(-Inf, 0, 2.5, 5, 7.5, 10, Inf))
-- For `gpxrolling`, smaller numbers will  make the plot more detailed (smaller facets), but note that the plotting will take longer. For example, if a gpx file only contains a climb of 2500 geometry points, and the rolling average will be set to 2500, then the gradient calculated will just be the gradient for the full climb, hence the plot will only contain one facet. 
+Colors of these gradient levels can be adjusted with `colorscalestr` by providing a with sting 6 hex colors. (example: `c("#9198A7","#C9E3B9", "#F9D49D", "#F7B175", "#F47D85", "#990000")`)
+
+For `gpxrolling`, smaller numbers will  make the plot more detailed (smaller facets), but note that the plotting will take longer. For example, if a gpx file only contains a climb of 2500 geometry points, and the rolling average will be set to 2500, then the gradient calculated will just be the gradient for the full climb, hence the plot will only contain one facet. 
 
 ### Note
 
