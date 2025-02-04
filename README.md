@@ -1,14 +1,19 @@
 # Cycling plots
 
-**this is work in progress**
+**This hobby project is still work in progress**
 
 ### Description
-Here's how to make beautiful cycling plots. Like this one!
+
+Here's how to make beautiful cycling height profiles. Like this one!
 <img src="https://github.com/EPdeJ/cyclingplots/blob/main/N1-1_Wufenshan.png">
 
-or
+and this one:
 
 <img src="https://github.com/EPdeJ/cyclingplots/blob/main/N1-2_Wufenshan Buyanting loop.png">
+
+or make a nice map plotting the route in a leaflet map:
+
+<img src="https://github.com/EPdeJ/cyclingplots/blob/main/N1-2_Wufenshan Buyanting loop_map.png">
 
 
 ### Usage
