@@ -6,8 +6,9 @@ roll=7
 colorscalestr=c("#9198A7","#C9E3B9", "#F9D49D", "#F7B175", "#F47D85", "#990000")
 gpxnr <- 2
 remotes::install_github("r-spatial/mapview")
-# add stamen key
-register_stadiamaps("{your key}", write = TRUE)
+
+# add Jawg api key
+key <- {"your key"}
 
 # load packages and filepaths ---------------------------------------------
 pacman::p_load(tidyverse,sf,ggmap,zoo,rosm,colorspace,ggspatial,tmap,maptiles,leaflet,leaflet.extras2,utils,htmltools,mapview,webshot2)
@@ -118,7 +119,7 @@ distance_markers$km_label <- paste(distance_markers$km_label, " Km")
 
 # make leaflet map
 map <- leaflet(track) %>% 
-  addTiles(urlTemplate = "https://tile.jawg.io/jawg-lagoon/{z}/{x}/{y}{r}.png?access-token=rOxSZvE2ZGMa3Aa7f0RXfPKvTgzdXsXPOStoRJ6ECZMySQgiIoBS34xehcFZWRCV",
+  addTiles(urlTemplate = "https://tile.jawg.io/jawg-lagoon/{z}/{x}/{y}{r}.png?access-token=",
            attribution = "<a href=\"https://www.jawg.io?utm_medium=map&utm_source=attribution\" target=\"_blank\">&copy; Jawg</a> - <a href=\"https://www.openstreetmap.org?utm_medium=map-attribution&utm_source=jawg\" target=\"_blank\">&copy; OpenStreetMap</a>&nbsp;contributors") %>% 
   addMiniMap(tiles ="https://tile.jawg.io/jawg-lagoon/{z}/{x}/{y}{r}.png?access-token=rOxSZvE2ZGMa3Aa7f0RXfPKvTgzdXsXPOStoRJ6ECZMySQgiIoBS34xehcFZWRCV",
              aimingRectOptions = list(color = "#23b09d", weight = 1, clickable = FALSE),) %>% 
