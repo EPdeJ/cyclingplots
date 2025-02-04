@@ -15,14 +15,6 @@ pacman::p_load(tidyverse,sf,ggmap,zoo,rosm,colorspace,ggspatial,tmap,maptiles,le
 S.path <- "G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/gpx/north"
 S.gpxlist <- list.files(path = S.path, pattern = "\\.gpx$", full.names = T)
 
-# temp
-gpxnr=2
-lijnkleur="red"
-jawgapi="ScYlimn0DmddEELnlYRgDZ9jWsWLj0VXUQcXKDxQ1d9Cjc1sKDb8FG4h2DZ6FJk2"
-trans=.9
-labeldirection="auto"
-finish="right"
-start="left"
 
 makemap <- function(gpxnr, start="left", finish="right", lijnkleur="#640c82", trans=1,labeldirection,jawgapi=""){
 # get track layer from gpx
@@ -172,7 +164,7 @@ map
 test <- as.data.frame(S.gpxlist)
 
 #use map function
-makemap(2,"botom","bottom", lijnkleur = "#640c82", trans=.7, labeldirection="auto", jawgapi = "ScYlimn0DmddEELnlYRgDZ9jWsWLj0VXUQcXKDxQ1d9Cjc1sKDb8FG4h2DZ6FJk2")
+makemap(2,"botom","bottom", lijnkleur = "#640c82", trans=.7, labeldirection="auto", jawgapi = jawg)
 
 # set save dimentions
 factor=4

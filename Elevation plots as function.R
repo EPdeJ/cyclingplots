@@ -322,9 +322,9 @@ elevationprofile(i,
 }
 
 
-elevationprofile(filedir,
-                 seq=2,
-                 roll=15,
+elevationprofile(S.gpxlist[10],
+                 seq=15,
+                 roll=5,
                  rollparameter="max",
                  colorscalestr=c("lightblue","lightgreen", "green", "pink", "orange", "darkred"),
                  linecolor="red",
