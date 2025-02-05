@@ -101,6 +101,9 @@ elevationprofile("crazy ride.gpx"",
 - create a shiny app of both functions
 - generate a package based on both function
 
+#### Idea's:
+- provide a historical overview of weather along the route or include a forcast for the next few days. 
+
   
 
 
