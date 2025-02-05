@@ -13,7 +13,7 @@ and this one:
 
 or make a nice map plotting the route in a leaflet map:
 
-<img src="https://github.com/EPdeJ/cyclingplots/blob/main/N1-2_Wufenshan Buyanting loop_map.png" width="75%" height="auto">
+<img src="https://github.com/EPdeJ/cyclingplots/blob/main/N1-2_Wufenshan Buyanting loop_map.png" width="73%" height="auto">
 
 
 ### Usage in short:
