@@ -154,31 +154,3 @@ filename <<- tools::file_path_sans_ext(basename(S.gpxlist[gpxnr]))
 map<<-map
 map
 }
-
-test <- as.data.frame(S.gpxlist)
-
-#use map function
-makemap(2,"botom","bottom", lijnkleur = "#640c82", trans=.7, labeldirection="auto", jawgapi = jawg)
-
-# set save dimentions
-factor=4
-plus=0
-breed <- 297.638*factor+plus
-lang <- 365.231*factor+plus
-
-# save plot as png
-mapshot(
-  map,
-  file = paste0(filename,"_map.png"),
-  remove_controls = c("zoomControl", "layersControl", "homeButton",
-                      "drawToolbar", "easyButton"),
-  vwidth = breed, 
-  vheight = lang)
-browseURL(paste0(filename,"_map.png"))
-getwd()
-#make gpx list
-routes <- data.frame(
-                     "route"=tools::file_path_sans_ext(basename(S.gpxlist))) %>% arrange(route)
-
-
-  
