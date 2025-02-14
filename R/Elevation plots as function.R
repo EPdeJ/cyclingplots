@@ -2,6 +2,7 @@
 # currently Jawg.Lagoon as base layer for maps in leaflet
 
 # load packages and filepaths ---------------------------------------------
+if(!require("pacman")){install.packages("pacman")}
 pacman::p_load(tidyverse,sf,zoo,Cairo, scales)
 
 # function elevation profile -------------------------------------------------------

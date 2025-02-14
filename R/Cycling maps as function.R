@@ -2,13 +2,18 @@
 # currently Jawg.Lagoon as base layer for maps in leaflet
 
 
-remotes::install_github("r-spatial/mapview")
+
 
 
 
 # load packages and filepaths ---------------------------------------------
-pacman::p_load(tidyverse,sf,ggmap,zoo,rosm,colorspace,ggspatial,tmap,maptiles,leaflet,leaflet.extras2,utils,htmltools,mapview,webshot2)
+if(!require("pacman")){install.packages("pacman")}
+pacman::p_load(tidyverse,sf,ggmap,zoo,rosm,colorspace,ggspatial,tmap,maptiles,leaflet,leaflet.extras2,utils,htmltools,webshot2,
+  remotes)
 
+remotes::install_github("r-spatial/mapview")
+
+library(mapview)
 
 makemap <- function(gpxnr = 2, start="left", finish="right", roll=7, lijnkleur="#640c82", trans=1,labeldirection,jawgapi="", colorscalestr=c("#9198A7","#C9E3B9", "#F9D49D", "#F7B175", "#F47D85", "#990000")){
 # get track layer from gpx
