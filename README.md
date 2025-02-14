@@ -5,15 +5,15 @@
 ### Description
 
 Here's how to make beautiful cycling height profiles. Like this one!
-<img src="https://github.com/EPdeJ/cyclingplots/blob/main/N1-1_Wufenshan.png" width="75%" height="auto">
+<img src="https://github.com/EPdeJ/cyclingplots/blob/main/images/N1-1_Wufenshan.png" width="75%" height="auto">
 
 and this one:
 
-<img src="https://github.com/EPdeJ/cyclingplots/blob/main/N1-2_Wufenshan Buyanting loop.png" width="75%" height="auto">
+<img src="https://github.com/EPdeJ/cyclingplots/blob/main/images/N1-2_Wufenshan Buyanting loop.png" width="75%" height="auto">
 
 or make a nice map plotting the route in a leaflet map:
 
-<img src="https://github.com/EPdeJ/cyclingplots/blob/main/N1-2_Wufenshan Buyanting loop_map.png" width="73%" height="auto">
+<img src="https://github.com/EPdeJ/cyclingplots/blob/main/images/N1-2_Wufenshan Buyanting loop_map.png" width="73%" height="auto">
 
 
 ### Usage in short:
@@ -92,7 +92,7 @@ elevationprofile("crazy ride.gpx"",
                  ggsave_background="transparent")
                   
 ```
-<img src="https://github.com/EPdeJ/cyclingplots/blob/main/Steep steeper steepst.png" width="50%" height="auto">
+<img src="https://github.com/EPdeJ/cyclingplots/blob/main/images/Steep steeper steepst.png" width="50%" height="auto">
 
 #### Future planning, for current functions:
 - add support for gpx files without elevation values
