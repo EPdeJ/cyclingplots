@@ -2,6 +2,7 @@
 # currently Jawg.Lagoon as base layer for maps in leaflet
 
 # load packages and filepaths ---------------------------------------------
+if(!require("pacman")){install.packages("pacman")}
 pacman::p_load(tidyverse,sf,zoo,Cairo, scales)
 
 # function elevation profile -------------------------------------------------------
@@ -282,7 +283,8 @@ plot <- ggplot(data=gpx)+
         panel.grid.major = element_blank(),
         panel.background = element_rect(fill = "transparent",color = NA), 
         plot.background = element_rect(fill = "transparent", color = NA),
-        axis.text.x = element_text(vjust = .5, margin = margin(t = 3)),
+        axis.text.x = element_text(vjust = .5, margin = margin(t = 3), size = 12),
+        axis.text.y = element_text(size=12),
         axis.ticks.length.x = unit(-0.15, "cm"),
         axis.ticks.x = element_line(color = "lightgrey", linewidth=1.5),
         axis.ticks.y = element_blank(),
@@ -307,34 +309,3 @@ plot
 }
 
 
-
-# use function ------------------------------------------------------------
-S.path <- "G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/gpx/north"
-S.gpxlist <- list.files(path = S.path, pattern = "\\.gpx$", full.names = T)
-
-for (i in S.gpxlist) {
-elevationprofile(i,
-                 plotsavedir = "G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/elevation plots/north",
-                 roll = 7, 
-                 seq=10,
-                 plotsave = T,  
-                 rollparameter="mean")
-}
-
-
-elevationprofile(S.gpxlist[10],
-                 seq=15,
-                 roll=5,
-                 rollparameter="max",
-                 colorscalestr=c("lightblue","lightgreen", "green", "pink", "orange", "darkred"),
-                 linecolor="red",
-                 maxlinecol="darkblue",
-                 transparency=.7,
-                 plotsave=T,
-                 plotsavedir=NULL,
-                 plotname="Steep steeper steepst",
-                 ggsave_width=24,
-                 ggsave_height=10,
-                 ggsave_dpi=300,
-                 ggsave_units="cm",
-                 ggsave_background="transparent")
