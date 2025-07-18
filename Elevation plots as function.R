@@ -2,7 +2,10 @@
 # currently Jawg.Lagoon as base layer for maps in leaflet
 
 # load packages and filepaths ---------------------------------------------
-pacman::p_load(tidyverse,sf,zoo,Cairo, scales)
+pacman::p_load(tidyverse,sf,zoo,Cairo, scales,showtext)
+
+font_add_google(name = "Noto Sans", family = "Noto Sans")  # Downloads and registers it
+showtext_auto()
 
 # function elevation profile -------------------------------------------------------
 # set start parameters for function
@@ -10,6 +13,7 @@ elevationprofile <- function(filepath,
                              seq=10,
                              roll=10,
                              rollparameter="max",
+                             breaks=10,
                              colorscalestr=c("#9198A7","#C9E3B9", "#F9D49D", "#F7B175", "#F47D85", "#990000"),
                              linecolor="#23b09d",
                              maxlinecol="red",
@@ -150,13 +154,7 @@ plot <- ggplot(data=gpx)+
            yend=rib3ele,
            colour="lightgrey",
            linewidth= .5)+ 
-  annotate("segment",
-           x=rib0dist,
-           xend=maxdist/1000,
-           y=rib0ele,
-           yend=rib0ele,
-           colour="lightgrey",
-           linewidth= .5)+
+  
   
   #plot "downhill or flat" area under the curve, which serves as the background
   geom_ribbon(aes(x=distance_total/1000,ymax=ele,ymin=0),
@@ -168,9 +166,9 @@ plot <- ggplot(data=gpx)+
   geom_ribbon(aes(x=distance_total/1000, 
                   ymax={ 
                     if (rollparameter == "max") { # Use gradient_roll_max_binned to evaluate gradient group
-                      ifelse(gradient_roll_max_binned == "<3%", ele, -Inf)
+                      ifelse(gradient_roll_max_binned == "<3%", ele, -1000000)
                     } else if (rollparameter == "mean") { # Use gradient_roll_mean_binned to evaluate gradient group
-                      ifelse(gradient_roll_mean_binned == "<3%", ele, -Inf)
+                      ifelse(gradient_roll_mean_binned == "<3%", ele, -1000000)
                     } else { NA_real_ 
                       warning("Invalid rollparameter specified. Select either \"max\" or \"mean\"") #Give a warning to the user
                     }
@@ -184,9 +182,9 @@ plot <- ggplot(data=gpx)+
   geom_ribbon(aes(x=distance_total/1000, 
                   ymax={ 
                     if (rollparameter == "max") { # Use gradient_roll_max_binned to evaluate gradient group
-                      ifelse(gradient_roll_max_binned == "3-6%", ele, -Inf)
+                      ifelse(gradient_roll_max_binned == "3-6%", ele, -1000000)
                     } else if (rollparameter == "mean") { # Use gradient_roll_mean_binned to evaluate gradient group
-                      ifelse(gradient_roll_mean_binned == "3-6%", ele, -Inf)
+                      ifelse(gradient_roll_mean_binned == "3-6%", ele, -1000000)
                     } 
                   },
                   ymin=0),
@@ -198,9 +196,9 @@ plot <- ggplot(data=gpx)+
   geom_ribbon(aes(x=distance_total/1000, 
                   ymax={ 
                     if (rollparameter == "max") { # Use gradient_roll_max_binned to evaluate gradient group
-                      ifelse(gradient_roll_max_binned == "6-9%", ele, -Inf)
+                      ifelse(gradient_roll_max_binned == "6-9%", ele, -1000000)
                     } else if (rollparameter == "mean") { # Use gradient_roll_mean_binned to evaluate gradient group
-                      ifelse(gradient_roll_mean_binned == "6-9%", ele, -Inf)
+                      ifelse(gradient_roll_mean_binned == "6-9%", ele, -1000000)
                     } 
                   },
                   ymin=0),
@@ -212,9 +210,9 @@ plot <- ggplot(data=gpx)+
   geom_ribbon(aes(x=distance_total/1000, 
                   ymax={ 
                     if (rollparameter == "max") { # Use gradient_roll_max_binned to evaluate gradient group
-                      ifelse(gradient_roll_max_binned == "9-12%", ele, -Inf)
+                      ifelse(gradient_roll_max_binned == "9-12%", ele, -1000000)
                     } else if (rollparameter == "mean") { # Use gradient_roll_mean_binned to evaluate gradient group
-                      ifelse(gradient_roll_mean_binned == "9-12%", ele, -Inf)
+                      ifelse(gradient_roll_mean_binned == "9-12%", ele, -1000000)
                     } 
                   },
                   ymin=0),
@@ -226,9 +224,9 @@ plot <- ggplot(data=gpx)+
   geom_ribbon(aes(x=distance_total/1000, 
                   ymax={ 
                     if (rollparameter == "max") { # Use gradient_roll_max_binned to evaluate gradient group
-                      ifelse(gradient_roll_max_binned == ">12%", ele, -Inf)
+                      ifelse(gradient_roll_max_binned == ">12%", ele, -1000000)
                     } else if (rollparameter == "mean") { # Use gradient_roll_mean_binned to evaluate gradient group
-                      ifelse(gradient_roll_mean_binned == ">12%", ele, -Inf)
+                      ifelse(gradient_roll_mean_binned == ">12%", ele, -1000000)
                     } 
                   },
                   ymin=0),
@@ -236,22 +234,23 @@ plot <- ggplot(data=gpx)+
               alpha=transparency
               )+
   
+  
   #' set y-axis limits for plot as they become wildly negative automatically due to 
   #' the set -1000000 for the shades for the gradients. This was needed because a 
   #' point with an elevation connecting to 0 would create a sloped line instead of a 
   #' vertical line. This still needs to be solved but the -1000000 patch is visually working
-  scale_y_continuous(limits = c(0,maxele+20),  position = "right",
-                     breaks = c(rib0ele, rib1ele,rib2ele,rib3ele,maxele),
-                     labels = c(paste0(round(rib0ele,0), " m"), 
+  scale_y_continuous(limits = c(0,maxele+100),  position = "right",
+                     breaks = c(rib1ele,rib2ele,rib3ele,maxele),
+                     labels = c( 
                                 paste0(round(rib1ele,0), " m"), 
                                 paste0(round(rib2ele,0), " m"),
                                 paste0(round(rib3ele,0), " m"),
-                                paste0(round(maxele,0), " m \n(Highest Point)")),
+                                paste0(round(maxele,0), " m")),
                      expand = c(0,1)
                      )+ 
   scale_x_continuous(
-    breaks = c(seq(0, maxdist/1000, by = 10),maxdist/1000), 
-    labels = paste0(c(seq(0, maxdist/1000, by = 10),round(maxdist/1000,0)), " Km"), 
+    breaks = c(seq(breaks, maxdist/1000, by = breaks)), 
+    labels = paste0(c(seq(breaks, maxdist/1000, by = breaks)), " km"), 
     minor_breaks = NULL,
     expand = c(0,1.5)
   ) +
@@ -273,6 +272,8 @@ plot <- ggplot(data=gpx)+
              stroke = 1, # Stroke thickness
              alpha = 1)+ # Transparency
   
+  
+  
   #change labels x and y axis
   xlab("Distance (km)")+
   ylab("Elevation (m)")+
@@ -282,11 +283,13 @@ plot <- ggplot(data=gpx)+
         panel.grid.major = element_blank(),
         panel.background = element_rect(fill = "transparent",color = NA), 
         plot.background = element_rect(fill = "transparent", color = NA),
-        axis.text.x = element_text(vjust = .5, margin = margin(t = 3)),
+        axis.text.x = element_text(size=40, vjust = .5, margin = margin(t = 3)),
+        axis.text.y = element_text(size = 40),
         axis.ticks.length.x = unit(-0.15, "cm"),
-        axis.ticks.x = element_line(color = "lightgrey", linewidth=1.5),
+        axis.ticks.x = element_line(color = "#23b09d", linewidth=3,lineend = "round",size = 2),
         axis.ticks.y = element_blank(),
-        axis.title = element_blank()
+        axis.title = element_blank(),
+        text = element_text(family = "Noto Sans")
         )
          
   
@@ -309,10 +312,11 @@ plot
 
 
 # use function ------------------------------------------------------------
-S.path <- "G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/gpx/north"
-S.gpxlist <- list.files(path = S.path, pattern = "\\.gpx$", full.names = T)
+# north routes
+N.path <- "G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/gpx/north"
+N.gpxlist <- list.files(path = N.path, pattern = "\\.gpx$", full.names = T)
 
-for (i in S.gpxlist) {
+for (i in N.gpxlist) {
 elevationprofile(i,
                  plotsavedir = "G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/elevation plots/north",
                  roll = 7, 
@@ -321,6 +325,71 @@ elevationprofile(i,
                  rollparameter="mean")
 }
 
+# N7>140km, change label distance
+elevationprofile(N.gpxlist[11],
+                 plotsavedir = "G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/elevation plots/north",
+                 roll = 7, 
+                 seq=10,
+                 plotsave = T,  
+                 rollparameter="mean",
+                 breaks=20)
+# south routes
+S.path <- "G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/gpx/south"
+S.gpxlist <- list.files(path = S.path, pattern = "\\.gpx$", full.names = T)
+
+for (i in S.gpxlist) {
+  elevationprofile(i,
+                   plotsavedir = "G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/elevation plots/south",
+                   roll = 7, 
+                   seq=10,
+                   plotsave = T,  
+                   rollparameter="mean")
+}
+
+# west routes
+W.path <- "G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/gpx/west"
+W.gpxlist <- list.files(path = W.path, pattern = "\\.gpx$", full.names = T)
+
+for (i in W.gpxlist) {
+  elevationprofile(i,
+                   plotsavedir = "G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/elevation plots/west",
+                   roll = 7, 
+                   seq=10,
+                   plotsave = T,  
+                   rollparameter="mean")
+}
+
+
+# east routes
+E.path <- "G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/gpx/east"
+E.gpxlist <- list.files(path = E.path, pattern = "\\.gpx$", full.names = T)
+
+for (i in E.gpxlist) {
+  elevationprofile(i,
+                   plotsavedir = "G:/.shortcut-targets-by-id/1kT69UY4d-Ny3cmezFuDPbeQRMwDT32dn/Fietsboek/2025/elevation plots/east",
+                   roll = 7, 
+                   seq=10,
+                   plotsave = T,  
+                   rollparameter="mean")
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+elevationprofile(N.gpxlist[1])
 
 elevationprofile(S.gpxlist[10],
                  seq=15,
