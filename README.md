@@ -5,15 +5,15 @@
 ### Description
 
 Here's how to make beautiful cycling height profiles. Like this one!
-<img src="https://github.com/EPdeJ/cyclingplots/blob/main/N1-1_Wufenshan.png" width="75%" height="auto">
+<img src="images/N1-1_Wufenshan.png" width="75%" height="auto">
 
 and this one:
 
-<img src="https://github.com/EPdeJ/cyclingplots/blob/main/N1-2_Wufenshan Buyanting loop.png" width="75%" height="auto">
+<img src="images/N1-2_Wufenshan Buyanting loop.png" width="75%" height="auto">
 
 or make a nice map plotting the route in a leaflet map:
 
-<img src="https://github.com/EPdeJ/cyclingplots/blob/main/N1-2_Wufenshan Buyanting loop_map.png" width="73%" height="auto">
+<img src="images/N1-2_Wufenshan Buyanting loop_map.png" width="73%" height="auto">
 
 
 ### Usage in short:
@@ -26,33 +26,25 @@ or make a nice map plotting the route in a leaflet map:
 * For now, elevation is needed as a variable in the gpx files, later support for gpx files without elevation will be added.
 * Future plans involve a shiny app allowing you to upload a .gpx file and generate the two images.  
  
-### Arguments elevation plot function
-                                                   
-- `filepath` need to be set to locate the gpx file, for example "C:/Users/user/Desktop/yilan-wulling.gpx"
-- `seq` factor to reduce the number of datapoints in a GPX file (especially usefull for calculations of gradients over longer streches)(default=10)
-- `roll` how many point shoulc be used in the calculation of rolling averages (default is 10)
-- `rollparameter` use max or mean method for rolling averages (default is "max")
-- `colorscalestr` will set the colors of the gradient levels. String length 6. First color is downhill or no gradient. (default"#9198A7","#C9E3B9", "#F9D49D", "#F7B175", "#F47D85", "#990000")
-- `linecolor` set the color of the height profile
-- `maxlinecol` sets the color of the maximum height line 
-- `transparency` set the transparency of the area under the curve
-- `elevationbreaksstr` sets the how the rolling gradient should be divided in different levels of difficulty
-- `plotsave`, `plotsavedir` and `plotname` can be set to save the plot automatically with **plotsave** as logical. Plots will be saved in the working directory. If none is provided working dir and gpx file name will be used.
-- `ggsave_width` set the width of the plot to save
-- `ggsave_height` set the height of the plot to save
-- `ggsave_dpi` set the dots per inch
-- `ggsave_units` set the units uses for height and width (default to "cm")
-- `ggsave_background` option to use "transparent"
-                          
-### Arguments map function 
+### Arguments for `elevationprofile()`
 
-* `gpxnr`
-* `start` to set the label direction for start label, options like "left","right","top" , "bottom" (standard= "left")
-* `finish` to set the label direction for finish label, options like "left","right","top" , "bottom" (standard= "left")
-* `lijnkleur` sets the route line color (standard= "#640c82")
-* `trans` sets the route line transparency (standard= 1, no transparancy)
-* `labeldirection` sets the driection of the Km markings (top, bottom, left, right or auto)
-* `jawgapi` set you personal api token, get one [at JAWG](https://www.jawg.io/lab/access-tokens) 
+- `filepath`: The full path to the GPX file (e.g., `"C:/data/route.gpx"`).
+- `seg`: The distance in meters over which to calculate the gradient. *Default: `1000` (i.e., 1 km segments)*
+- `fixed_breaks`: A numeric value to set a fixed distance for x-axis labels (e.g., `5000` for labels every 5 km). If `NULL`, breaks are determined automatically. *Default: `NULL`*
+- `colorscalestr`: A vector of 6 hex color codes for the gradient levels, from downhill/flat to steepest uphill. *Default: `c("#9198A7", "#C9E3B9", "#F9D49D", "#F7B175", "#F47D85", "#990000")`*
+- `linecolor`: The color of the elevation profile line. *Default: `"#22678A"`*
+- `maxlinecol`: The color of the horizontal line indicating the maximum elevation. *Default: `"red"`*
+- `transparency`: The transparency of the colored area under the curve representing the gradient. *Default: `1` (fully opaque)*
+- `plotsave`: Logical (`TRUE`/`FALSE`). If `TRUE`, the plot is saved to disk. *Default: `FALSE`*
+- `plotsavedir`: The directory where the plot will be saved. If `NULL`, it saves to the current working directory. *Default: `NULL`*
+- `plotname`: The file name for the saved plot. If left empty, the name is generated from the GPX file name. *Default: `""`*
+- `ggsave_width`: The width of the saved plot. *Default: `24`*
+- `ggsave_height`: The height of the saved plot. *Default: `10`*
+- `ggsave_dpi`: The resolution (dots per inch) of the saved plot. *Default: `300`*
+- `ggsave_units`: The units for width and height (`"cm"`, `"in"`, or `"mm"`). *Default: `"cm"`*
+- `ggsave_background`: The background color of the saved plot. Use `"transparent"` for a clear background. *Default: `"transparent"`*
+- `mingraddist`: The minimum distance in meters to consider for elevation changes, used for GPS jitter correction. *Default: `5`*
+- `textsize`: The base text size for labels and titles on the plot. *Default: `60`*
 
 ### Details
 6 levels have been set as categories for the area under the curve colors, based on the following grade categories:
@@ -74,25 +66,25 @@ For `gpxrolling`, smaller numbers will  make the plot more detailed (smaller fac
 ```{r elevation-plot, dev='png',message=FALSE}
 elevationprofile("gpx/crazy ride.gpx") # simple use, using standard presets 
 
-elevationprofile("crazy ride.gpx"",
-                 seq=15,
-                 roll=5,
-                 rollparameter="max",
-                 colorscalestr=c("lightblue","lightgreen", "green", "pink", "orange", "darkred"),
-                 linecolor="red",
-                 maxlinecol="darkblue",
-                 transparency=.7,
-                 plotsave=T,
-                 plotsavedir=NULL,
-                 plotname="Steep steeper steepst",
-                 ggsave_width=24,
-                 ggsave_height=10,
-                 ggsave_dpi=300,
-                 ggsave_units="cm",
-                 ggsave_background="transparent")
+  elevationprofile(gpx/crazy ride.gpx,
+                   seg=2000,
+                   fixed_breaks=7.5,
+                   mingraddist=2.5,
+                   colorscalestr=c("lightblue","lightgreen", "green", "pink", "orange", "darkred"),
+                   linecolor="red",
+                   maxlinecol="darkblue",
+                   transparency=.7,
+                   plotsave=T,
+                   plotsavedir="~/cyclingplots/images",
+                   plotname="Steep steeper steepst",
+                   ggsave_width=24,
+                   ggsave_height=10,
+                   ggsave_dpi=300,
+                   ggsave_units="cm",
+                   ggsave_background="transparent")
                   
 ```
-<img src="https://github.com/EPdeJ/cyclingplots/blob/main/Steep steeper steepst.png" width="50%" height="auto">
+<img src="images/Steep steeper steepst.png" width="50%" height="auto">
 
 #### Future planning, for current functions:
 - add support for gpx files without elevation values

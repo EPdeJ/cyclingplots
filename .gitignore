@@ -1,6 +1,153 @@
-.Rproj.user
+# ===================================================================
+# .gitignore file for R Projects
+# ===================================================================
+
+
+# RStudio project-specific files (user settings, open files, etc.)
+# This folder is unique to each user's machine and should not be tracked.
+.Rproj.user/
+
+# R command history. Avoid committing this as it's user-specific.
 .Rhistory
+
+# R workspace data. It's better to regenerate this from scripts.
 .RData
+
+# Other R user data.
 .Ruserdata
+
+# Api key
 jawg api.R
-cyclingplots.Rpoj
+
+# RStudio Project files.
+# *.Rproj
+
+
+# ===================================================================
+# R & RStudio Specific
+# ===================================================================
+
+# R-related cache and temporary files
+.Rbuildignore
+_Rbuild/
+# RStudio desktop state
+.rstudio-desktop/
+
+# Package development files
+# If you are not developing a package, you can ignore these.
+*.tar.gz
+*.Rcheck/
+
+# R-generated temporary files
+*~
+*.swp
+
+# rsconnect folder used for publishing to RStudio Connect / shinyapps.io
+rsconnect/
+
+
+# ===================================================================
+# Dependency Management (e.g., renv, packrat)
+# ===================================================================
+renv/
+packrat/
+
+# If using Python in the project (e.g., via reticulate)
+.venv/
+venv/
+*.pyc
+
+
+# ===================================================================
+# Secrets and Credentials - VERY IMPORTANT!
+# ===================================================================
+# NEVER commit files containing API keys, passwords, or other secrets.
+
+# A common convention for environment variables
+.env
+.env.*
+!/.env.example
+
+# Files containing keys, tokens, or credentials by naming convention
+*secret*
+*key*
+*token*
+*credential*
+
+# OAuth tokens from packages like httr or googlesheets4
+.httr-oauth
+*_token.rds
+.gargle_token/
+
+
+# ===================================================================
+# Generated Output, Reports, and Plots
+# ===================================================================
+# It's best practice to commit the source code (e.g., .Rmd, .qmd)
+# and let others regenerate the output files.
+
+# Common output formats from R Markdown or Quarto
+*.html
+*.pdf
+*.docx
+*.md
+*.log
+
+# Knitr and Quarto cache/figure directories
+*_cache/
+*_files/
+/cache/
+/figure/
+
+# Output from bookdown or Quarto websites/books
+_book/
+_site/
+_quarto/
+
+
+# ===================================================================
+# Large Data Files
+# ===================================================================
+# Git is not designed for large binary files. Use a service like
+# Git LFS (Large File Storage) for these, or store them elsewhere.
+# Uncomment and adapt these lines as needed.
+
+# /data/
+# *.csv
+# *.tsv
+# *.xlsx
+# *.xls
+# *.rds
+# *.Rda
+# *.feather
+# *.parquet
+
+
+# ===================================================================
+# Common IDE / Editor specific files
+# ===================================================================
+
+# VS Code
+.vscode/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+
+# ===================================================================
+# Operating System specific files
+# ===================================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
