@@ -235,7 +235,7 @@
               panel.grid.major = element_blank(),
               panel.background = element_rect(fill = "transparent",color = NA), 
               plot.background = element_rect(fill = "transparent", color = NA),
-              axis.text.x = element_text(size=textsize, vjust = .5, margin = margin(t = 3)),
+              axis.text.x = element_text(size= textsize, vjust = .5, margin = margin(t = 3)),
               axis.text.y = element_text(size = textsize),
               axis.ticks.length.x = unit(-0.15, "cm"),
               axis.ticks.x = element_line(color = linecolor, linewidth=3,lineend = "round"),
