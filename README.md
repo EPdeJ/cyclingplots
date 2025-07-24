@@ -29,9 +29,9 @@ or make a nice map plotting the route in a leaflet map:
 ### Arguments for `elevationprofile()`
 
 - `data_input`: This argument will accept either a filepath or a dataframe (e.g., `"C:/data/route.gpx"`). Dataframes need the following variables:
-  -'distance_total'
-  -'ele' 
-  -'avggradient'
+  - 'distance_total'
+  - 'ele' 
+  - 'avggradient'
 - `seg`: The distance in meters over which to calculate the gradient. *Default: `1000` (i.e., 1 km segments)*
 - `fixed_breaks`: A numeric value to set a fixed distance for x-axis labels (e.g., `5000` for labels every 5 km). If `NULL`, breaks are determined automatically. *Default: `NULL`*
 - `colorscalestr`: A vector of 6 hex color codes for the gradient levels, from downhill/flat to steepest uphill. *Default: `c("#9198A7", "#C9E3B9", "#F9D49D", "#F7B175", "#F47D85", "#990000")`*
