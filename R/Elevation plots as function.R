@@ -45,7 +45,7 @@
         distance_diff = c(0,lag(st_distance(geometry,lead(geometry),by_element = TRUE))[-1])
       )                                     
     
-  # use an excisting dataframe if provided
+  # use an existing data frame if provided
     } else if (inherits(data_input, "data.frame")) { # If data_input is a dataframe
       gpx <- data_input 
       message("Using provided data frame as input.")
