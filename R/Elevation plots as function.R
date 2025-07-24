@@ -10,9 +10,9 @@
   showtext_auto()
 
 # function elevation profile -------------------------------------------------------
-  elevationprofile <- function(filepath, # file path to single .gpx file
+  elevationprofile <- function(data_input, # This argument will accept either a filepath or a dataframe
                                seg=1000, # set distance for gradient calculation (1000 = 1 km)
-                               fixed_breaks=NULL, # set distance for x-axis label override
+                               fixed_breaks=NULL, # set distance for x-axis label override (in km)
                                colorscalestr=c("#9198A7","#C9E3B9", "#F9D49D", "#F7B175", "#F47D85", "#990000"),
                                linecolor="#22678A", # colour of profile line
                                maxlinecol="red", # colour of max height line
@@ -28,17 +28,45 @@
                                mingraddist=5, # set gps jitter correction in meters 
                                textsize=60 # set text size of plot
                                ){
+    
+  # logic parameter to check filpath vs. df
+    if (is.character(data_input)) { # If data_input is a file path
+      filepath <- data_input # Assign it to filepath for consistency with original code
+      message("Reading GPX file from: ", filepath)
                         
                       
   # import gpx into sf object to add geometry
     gpx <- st_read(filepath,layer="track_points") # turn into sf object
     gpx <- gpx %>% select(track_seg_point_id, ele,geometry) # select the useful rows
+    
+  # calculate the difference in distance between data points
+    gpx<- gpx %>%
+      mutate(
+        distance_diff = c(0,lag(st_distance(geometry,lead(geometry),by_element = TRUE))[-1])
+      )                                     
+    
+  # use an excisting dataframe if provided
+    } else if (inherits(data_input, "data.frame")) { # If data_input is a dataframe
+      gpx <- data_input 
+      message("Using provided data frame as input.")
+      
+      # --- Data validation for provided data frame (Crucial!) ---
+      # Ensure the necessary columns exist if a dataframe is passed
+      required_cols <- c("distance_total", "ele", "avggradient")
+      if (!all(required_cols %in% names(gpx))) {
+        stop("Error: Provided data frame is missing required columns.
+           Please ensure it contains 'distance_total', 'ele', and 'avggradient'.")
+      }
+      # You might also want to check the data types of these columns if you're strict.
+      
+    } else {
+      stop("Error: 'data_input' must be either a file path (character string) to a GPX file or a data frame with pre-calculated 'distance_total', 'ele', and 'avggradient' columns.")
+    }
   
   # calculate the difference in distance and elevation between data points
     gpx<- gpx %>%
       mutate(
-        elevation_diff=c(0,lag((lead(ele)-ele))[-1]),
-        distance_diff = c(0,lag(st_distance(geometry,lead(geometry),by_element = TRUE))[-1])
+        elevation_diff=c(0,lag((lead(ele)-ele))[-1])
             )                                     
   
   # calculate the cumsum of the distance and elevation per point
@@ -84,7 +112,14 @@
     
   # introduce logic parameters to set x-axis breaks based on total distance in meters
     if (!is.null(fixed_breaks)) {
-      breaks <- fixed_breaks # Override with the provided value
+      # Check for the override condition
+      if (fixed_breaks*1000 > maxdist) {
+        # Display an error message and stop the function
+        stop("Error: Chosen breaks (", fixed_breaks, ") are larger than maximum distance (", round(maxdist/1000,digits = 0), "). Please choose a smaller value or remove fixed_breaks.")
+      } else {
+        # If fixed_breaks is provided AND not too large, use it
+        breaks <- fixed_breaks*1000
+      }
     } else {
       if (maxdist > 30000 & maxdist <= 100000 ) {
         breaks <- 10
@@ -244,21 +279,35 @@
               text = element_text(family = "Noto Sans")
               )
            
-  # save plot is specified in function
-    if(plotsave){ ggsave(plot= plot,
-                         path = plotsavedir,
-                         filename = paste0(ifelse(plotname!="", 
-                                                  paste(plotname),
-                                                  sub("\\.gpx$", 
-                                                      "", 
-                                                      basename(filepath))),
-                                           ".png"),
-                         width = as.numeric(ggsave_width),
-                         height = as.numeric(ggsave_height),
-                         units =ggsave_units,
-                         dpi = as.numeric(ggsave_dpi),
-                         type = "cairo-png",
-                         bg = ggsave_background )
+    # save plot is specified in function
+    if(plotsave){
+      # Determine the filename
+      final_plot_filename <- if (plotname != "") {
+        plotname # Use the provided plotname
+      } else {
+        # If plotname is not provided, generate a default based on input type
+        if (is.character(data_input)) { # If input was a file path
+          # Use the original logic for file paths
+          sub("\\.gpx$", "", basename(data_input))
+        } else { # If input was a data frame
+          # Generate a default name for data frame input
+          # You can make this as sophisticated as you need.
+          # For example, use a timestamp, or a generic name.
+          # Here, I'll use a generic name with a timestamp to avoid overwrites.
+          paste0("elevation_profile_", format(Sys.time(), "%Y%m%d_%H%M%S"))
+        }
+      }
+      
+      ggsave(plot = plot,
+             path = plotsavedir,
+             filename = paste0(final_plot_filename, ".png"), # Use the determined filename
+             width = as.numeric(ggsave_width),
+             height = as.numeric(ggsave_height),
+             units = ggsave_units,
+             dpi = as.numeric(ggsave_dpi),
+             type = "cairo-png",
+             bg = ggsave_background
+      )
     }
   
   # display plot 

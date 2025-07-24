@@ -1,8 +1,22 @@
-
 # load packages -----------------------------------------------------------
-  pacman::p_load(sf,tmap, rcartocolor,maptiles, tmaptools,OpenStreetMap,cartography,viridis,osmdata,RColorBrewer,cols4all,showtext,tmaptools, tidyverse)
+  pacman::p_load(sf,
+                 tmap, 
+                 rcartocolor,
+                 maptiles, 
+                 tmaptools,
+                 OpenStreetMap,
+                 cartography,
+                 viridis,
+                 osmdata,
+                 RColorBrewer,
+                 cols4all,
+                 showtext,
+                 tmaptools, 
+                 tidyverse)
   # c4a_gui() to check all colors from cols4all
 
+# load colours 
+  source("setup/Book colours by region.R")
 
 # select north Taiwan -----------------------------------------------------
   tw.north <- tw.grouped %>% 
@@ -20,15 +34,9 @@ tw.north.suburb <- opq(bbox=box) %>%
   add_osm_feature (key = "place", value = "suburb") %>% 
   osmdata_sf ()
 
-# colors 
-
-palette_north <- c("#11998E", "#5EC3B8", "#EAF6F3")
-palette_west  <- c("#1B8A89", "#76A9A9", "#C3D7D7")
-palette_east  <- c("#0387C6", "#7CAED2", "#C3D7E6")
-palette_south <- c("#6641A4", "#A28AC1", "#D8D0E6")
-palette_special <- c("#D59D81", "#E3C2AF", "#F1E1D7")
 
 
+getwd()
 get_overpass_url()
 
 available_tags("name")
