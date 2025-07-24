@@ -1,13 +1,15 @@
 
 # load packages -----------------------------------------------------------
-pacman::p_load(sf,tmap, rcartocolor,maptiles, tmaptools,OpenStreetMap,cartography,viridis,osmdata,RColorBrewer,cols4all,showtext,tmaptools, tidyverse)
-c4a_gui()
+  pacman::p_load(sf,tmap, rcartocolor,maptiles, tmaptools,OpenStreetMap,cartography,viridis,osmdata,RColorBrewer,cols4all,showtext,tmaptools, tidyverse)
+  # c4a_gui() to check all colors from cols4all
+
+
 # select north Taiwan -----------------------------------------------------
-tw.north <- tw.grouped %>% 
-  # filter(GROUP=="East Taiwan") %>%
-  st_buffer(dist = 0.0001) %>% 
-  st_union(by_feature = F,is_coverage = F) %>%
-  st_boundary()
+  tw.north <- tw.grouped %>% 
+    # filter(GROUP=="East Taiwan") %>%
+    st_buffer(dist = 0.0001) %>% 
+    st_union(by_feature = F,is_coverage = F) %>%
+    st_boundary()
 
 # make bounding box -------------------------------------------------------
 box <- st_bbox(tw.north)
