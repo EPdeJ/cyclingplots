@@ -14,14 +14,22 @@
                  tmap,
                  maptiles,
                  leaflet,
+                 leaflet.extras,
                  leaflet.extras2,
                  utils,
                  htmltools,
                  webshot2,
+                 webshot,
                  remotes,
                  geosphere,
-                 mapview)
-
+                 mapview,
+                 knitr)
+# Generate north arrow
+  north_arrow_html <- paste0(
+    "<div class='north-arrow-control' style='background: transparent; border: none; box-shadow: none;'>",
+    "<img src='", knitr::image_uri("north.png"), "' style='width:40px; height:auto;'/>",
+    "</div>"
+  )
 
 
 # build function 
@@ -92,11 +100,11 @@
                  options = leafletOptions(minZoom = zoom,
                                           maxZoom = zoom,
                                           attributionControl = TRUE),
-                 attribution = "<a href=\"https://www.jawg.io?utm_medium=map&utm_source=attribution\" target=\"_blank\">&copy; Jawg</a>
-                 - 
-                 <a href=\"https://www.openstreetmap.org?utm_medium=map-attribution&utm_source=jawg\" target=\"_blank\">&copy; OpenStreetMap </a>
-                 contributors
-                 <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">  openstreetmap.org/copyright</a>") %>% 
+                 attribution = "&copy;Jawg Maps
+                 <a href=\"https://www.jawg.io\" target=\"_blank\">www.jawg.io</a> 
+           &
+           &copy;OpenStreetMap contributors
+           <a href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\">openstreetmap.org/copyright</a>") %>%
         {
           if(minimap){addMiniMap(.,tiles =paste0("https://tile.jawg.io/jawg-lagoon/{z}/{x}/{y}{r}.png?access-token=",jawgapi),
                                  position = "bottomleft",
@@ -154,37 +162,56 @@
                                                           "background"="darkred"
                                                         ))
                               ) %>% 
+        
         addScaleBar(position = "bottomleft") %>% 
+        addControl(html = north_arrow_html, position = "bottomleft") %>%
         htmlwidgets::onRender("
-          function(el, x) {
-            var map = this;
-      
-            // Move attribution to bottomleft
-            map.attributionControl.setPosition('bottomleft');
-      
-            // Wait a moment to ensure all controls are rendered
-            setTimeout(function() {
-              var container = document.querySelector('.leaflet-bottom.leaflet-left');
-              var attribution = container.querySelector('.leaflet-control-attribution');
-              if (attribution) {
-                container.appendChild(attribution); // move it to bottom
-                attribution.style.marginLeft = '30px';
-                 attribution.style.marginBottom = '0px';
-              }
-            // Shift scalebar
-            var scale = container.querySelector('.leaflet-control-scale');
-            if (scale) {
-              scale.style.marginLeft = '80px'; // adjust offset
-               scale.style.marginBottom = '0px';
+        function(el, x) {
+        var map = this;
+  
+        // Move attribution to bottomleft
+        map.attributionControl.setPosition('bottomleft');
+  
+        setTimeout(function() {
+          var container = document.querySelector('.leaflet-bottom.leaflet-left');
+          var attribution = container.querySelector('.leaflet-control-attribution');
+          if (attribution) {
+            container.appendChild(attribution);
+            attribution.style.marginLeft = '40px';
+            attribution.style.marginBottom = '0px';
+          }
+          
+          // Transparent North Arrow
+          var northArrow = container.querySelector('.north-arrow-control');
+          if (northArrow) {
+            northArrow.style.background = 'transparent';
+            northArrow.style.border = 'none';
+            northArrow.style.boxShadow = 'none';
+            northArrow.style.marginLeft = '60px';
+            northArrow.style.marginBottom = '-15px';
+            
+            // Also style Leaflet's parent wrapper
+            if (northArrow.parentElement) {
+              northArrow.parentElement.style.background = 'transparent';
+              northArrow.parentElement.style.border = 'none';
+              northArrow.parentElement.style.boxShadow = 'none';
             }
-      
-            // Shift minimap
-            var mini = container.querySelector('.leaflet-control-minimap');
-            if (mini) {
-              mini.style.marginLeft = '80px'; // adjust offset
-               mini.style.marginBottom = '30px';
-            }
-            }, 100);
+          }
+          
+          // Shift scalebar
+          var scale = container.querySelector('.leaflet-control-scale');
+          if (scale) {
+            scale.style.marginLeft = '80px';
+            scale.style.marginBottom = '0px';
+          }
+  
+          // Shift minimap
+          var mini = container.querySelector('.leaflet-control-minimap');
+          if (mini) {
+            mini.style.marginLeft = '80px';
+            mini.style.marginBottom = '30px';
+          }
+        }, 100);
           }
         ")
       filename <<- tools::file_path_sans_ext(basename(gpxlist[i]))
